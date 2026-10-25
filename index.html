@@ -114,19 +114,24 @@
   <!-- ASOSIY QISM -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
 
-    <!-- 0. IDUM TANLASH BANNERI -->
-    <section id="school-selector-banner" class="mb-5 bg-gradient-to-r from-sky-900 to-indigo-950 rounded-3xl p-4 sm:p-5 text-white shadow-lg border border-sky-700/40">
+    <!-- 0. IDUM / MAKTAB TANLASH BANNERI -->
+    <section id="school-selector-banner" class="mb-5 bg-gradient-to-r from-sky-900 via-indigo-950 to-slate-900 rounded-3xl p-4 sm:p-5 text-white shadow-lg border border-sky-700/40">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
         <div>
           <div class="flex items-center gap-2 text-amber-400 text-xs font-extrabold uppercase tracking-wider">
             <i class="fa-solid fa-building-columns"></i>
-            <span>IDUM Axborot Tizimi (Kundalik.com Sinxron)</span>
+            <span id="banner-system-badge">IDUM Axborot Tizimi (Kundalik.com Sinxron)</span>
           </div>
-          <h1 class="text-base sm:text-xl font-black mt-0.5" id="current-school-heading">
-            1-Sonli IDUM
-          </h1>
-          <p class="text-[11px] sm:text-xs text-sky-200 mt-0.5">
-            5-11 sinf o'quvchilari Kundalik.com tizimidan avtomatik ajratilgan. Bittalab kiritish shart emas!
+          <div class="flex items-center gap-2.5 flex-wrap mt-0.5">
+            <h1 class="text-base sm:text-2xl font-black" id="current-school-heading">
+              1-Sonli IDUM
+            </h1>
+            <span id="banner-students-pill" class="inline-flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-3 py-1 rounded-full text-xs font-black shadow-sm">
+              Jami: --- nafar o'quvchi
+            </span>
+          </div>
+          <p class="text-[11px] sm:text-xs text-sky-200 mt-1" id="banner-school-students-info">
+            5-11 sinf o'quvchilari Kundalik.com tizimidan avtomatik ajratilgan.
           </p>
         </div>
 
@@ -135,11 +140,11 @@
           
           <!-- IDUM / Maktab tugmalari -->
           <div class="inline-flex p-1 bg-black/30 rounded-xl border border-white/10 gap-1">
-            <button type="button" id="btn-type-idum" onclick="setSchoolType('idum')" class="px-3 py-1.5 rounded-lg text-xs font-black transition flex items-center justify-center gap-1.5 bg-amber-400 text-slate-950 shadow-sm active:scale-95 touch-btn">
+            <button type="button" id="btn-type-idum" onclick="setSchoolType('idum')" class="px-3.5 py-2 rounded-lg text-xs font-black transition flex items-center justify-center gap-1.5 bg-amber-400 text-slate-950 shadow-sm active:scale-95 touch-btn">
               <span>🏛️</span>
               <span>IDUM</span>
             </button>
-            <button type="button" id="btn-type-maktab" onclick="setSchoolType('maktab')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 touch-btn">
+            <button type="button" id="btn-type-maktab" onclick="setSchoolType('maktab')" class="px-3.5 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 touch-btn">
               <span>🏫</span>
               <span>Maktab</span>
             </button>
@@ -148,15 +153,26 @@
           <!-- Sonini kiritish (strelkalarsiz, faqat qo'lda yoziladi) -->
           <div class="relative flex-1 sm:w-28">
             <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-sky-300 font-black text-xs pointer-events-none">№</span>
-            <input id="custom-school-num" type="number" min="1" max="999" placeholder="1" value="1" class="w-full pl-7 pr-2.5 py-2 bg-white/15 text-white placeholder-sky-300 text-xs font-black rounded-xl border border-white/20 focus:outline-none focus:ring-2 focus:ring-amber-400 text-center sm:text-left">
+            <input id="custom-school-num" type="number" min="1" max="999" placeholder="1" value="1" onkeydown="if(event.key==='Enter') applyCustomSchool(true)" class="w-full pl-7 pr-2.5 py-2 bg-white/15 text-white placeholder-sky-300 text-xs font-black rounded-xl border border-white/20 focus:outline-none focus:ring-2 focus:ring-amber-400 text-center sm:text-left">
           </div>
 
           <!-- Tanlash tugmasi -->
-          <button onclick="applyCustomSchool()" class="px-4 py-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black text-xs rounded-xl shadow-md transition active:scale-95 touch-btn flex items-center justify-center gap-1.5 whitespace-nowrap">
+          <button onclick="applyCustomSchool(true)" class="px-4 py-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black text-xs rounded-xl shadow-md transition active:scale-95 touch-btn flex items-center justify-center gap-1.5 whitespace-nowrap">
             <span>Tanlash</span>
             <i class="fa-solid fa-arrow-right text-[11px]"></i>
           </button>
         </div>
+      </div>
+
+      <!-- Tanlangani haqida tasdiqlovchi xabar (Toast / Xabarnoma) -->
+      <div id="school-change-toast" class="hidden mt-3 p-3 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-200 text-xs flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+          <span id="school-change-toast-msg" class="font-bold"></span>
+        </div>
+        <button onclick="document.getElementById('school-change-toast').classList.add('hidden')" class="text-white/60 hover:text-white text-xs p-1">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
 
       <!-- Tezkor Maktab Metriklari -->
@@ -986,17 +1002,20 @@
       
       if (btnIdum && btnMaktab) {
         if (type === 'idum') {
-          btnIdum.className = "px-3 py-1.5 rounded-lg text-xs font-black transition flex items-center justify-center gap-1.5 bg-amber-400 text-slate-950 shadow-sm active:scale-95 touch-btn";
-          btnMaktab.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 touch-btn";
+          btnIdum.className = "px-3.5 py-2 rounded-lg text-xs font-black transition flex items-center justify-center gap-1.5 bg-amber-400 text-slate-950 shadow-sm active:scale-95 touch-btn";
+          btnMaktab.className = "px-3.5 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 touch-btn";
         } else {
-          btnMaktab.className = "px-3 py-1.5 rounded-lg text-xs font-black transition flex items-center justify-center gap-1.5 bg-amber-400 text-slate-950 shadow-sm active:scale-95 touch-btn";
-          btnIdum.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 touch-btn";
+          btnMaktab.className = "px-3.5 py-2 rounded-lg text-xs font-black transition flex items-center justify-center gap-1.5 bg-amber-400 text-slate-950 shadow-sm active:scale-95 touch-btn";
+          btnIdum.className = "px-3.5 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 touch-btn";
         }
       }
+
+      // Foydalanuvchi tugmani bosishi bilanoq darhol yangilansin va o'quvchilar sonini ko'rsatsin
+      applyCustomSchool(true);
     }
 
     // Foydalanuvchi kiritgan IDUM yoki Maktab raqamini qo'llash
-    function applyCustomSchool() {
+    function applyCustomSchool(showFeedback = true) {
       const numInput = document.getElementById('custom-school-num');
       const val = parseInt(numInput.value);
 
@@ -1011,7 +1030,21 @@
       const formattedName = (currentSchoolType === 'idum') 
         ? `${val}-Sonli IDUM` 
         : `${val}-Sonli Davlat Umumta'lim Maktabi`;
+      
       loadSchool(val, formattedName);
+
+      if (showFeedback) {
+        const total = schoolData.classStudents.length;
+        const toast = document.getElementById('school-change-toast');
+        const toastMsg = document.getElementById('school-change-toast-msg');
+        if (toast && toastMsg) {
+          toastMsg.innerHTML = `<strong>${formattedName}</strong> muvaffaqiyatli tanlandi! Ushbu muassasada jami <strong>${total} nafar</strong> o'quvchi (5-11 sinflar) mavjud.`;
+          toast.classList.remove('hidden');
+          setTimeout(() => {
+            if (toast) toast.classList.add('hidden');
+          }, 6000);
+        }
+      }
     }
 
     // Headerdagi "Muassasani almashtirish" tugmasi bosilganda
@@ -1039,12 +1072,33 @@
       const numInput = document.getElementById('custom-school-num');
       if (numInput) numInput.value = num;
 
-      setSchoolType(currentSchoolType);
+      const total = schoolData.classStudents.length;
+      const pill = document.getElementById('banner-students-pill');
+      if (pill) {
+        pill.innerText = `Jami: ${total} nafar o'quvchi`;
+      }
+      const badge = document.getElementById('banner-system-badge');
+      if (badge) {
+        badge.innerText = currentSchoolType === 'idum' ? 'IDUM Axborot Tizimi (Kundalik.com Sinxron)' : 'Maktab Axborot Tizimi (Kundalik.com Sinxron)';
+      }
+      const infoP = document.getElementById('banner-school-students-info');
+      if (infoP) {
+        infoP.innerHTML = `Ushbu muassasada 5-A dan 11-G gacha jami <strong>${total} nafar</strong> o'quvchi Kundalik.com dan avtomatik shakllantirilgan.`;
+      }
 
       updateSchoolMetricsUI();
 
       if (currentUser) {
         if (currentUser.role === 'admin' || currentUser.role === 'zavuch') {
+          document.getElementById('admin-school-subtitle').innerText = `${currentSchoolName} — 5-11 sinflarining to'liq ro'yxati va davomati.`;
+          populateAllClassesDropdown('admin-filter-class');
+          renderAdminDashboard();
+        } else if (currentUser.role === 'teacher') {
+          populateAllClassesDropdown('teacher-class-select');
+          renderTeacherJournal();
+        }
+      }
+    }
           populateAllClassesDropdown('admin-filter-class');
           renderAdminDashboard();
         } else if (currentUser.role === 'teacher') {
@@ -1930,7 +1984,7 @@
     }
 
     // Dastlabki yuklash
-    updateSchoolMetricsUI();
+    loadSchool(currentSchoolNumber, currentSchoolName);
   </script>
 </body>
 </html>
