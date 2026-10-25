@@ -344,34 +344,41 @@
         </div>
       </div>
 
-      <!-- C) O'QITUVCHILAR UCHUN (+998 AVTOMATIK) -->
+      <!-- C) O'QITUVCHI VA KURATORLAR UCHUN (+998 AVTOMATIK) -->
       <div id="login-teacher-section" class="hidden bg-white rounded-3xl p-5 sm:p-7 border border-slate-200 shadow-xl space-y-5">
         <div class="text-center">
           <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-500 to-sky-600 text-white mx-auto flex items-center justify-center text-2xl mb-3 shadow-md shadow-indigo-500/20">
-            👩‍🏫
+            👨‍🏫
           </div>
-          <h2 class="text-xl sm:text-2xl font-black text-slate-900">O'qituvchilar Portali</h2>
-          <p class="text-xs text-slate-500 mt-1">Ustozlar o'z ism-familiyasi va telefon raqami bilan kiradi</p>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900">O'qituvchi va Kurator Portali</h2>
+          <p class="text-xs text-slate-500 mt-1">Dars beruvchi fan o'qituvchilari va sinf kuratorlari kirishi</p>
         </div>
 
         <div id="teacher-error-alert" class="hidden p-4 rounded-2xl bg-red-50 border border-red-200 text-red-800 text-xs">
-          <h4 class="font-extrabold text-sm text-red-900">Ma'lumotlar xato!</h4>
-          <p class="mt-0.5">Ushbu o'qituvchi maktab o'qituvchilari ro'yxatida topilmadi. Boshidan urinib ko'ring.</p>
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-xl bg-red-100 text-red-600 flex items-center justify-center text-sm shrink-0 font-bold">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div>
+              <h4 class="font-extrabold text-sm text-red-900">Ma'lumotlar xato!</h4>
+              <p class="mt-0.5" id="teacher-error-msg">Kiritilgan shaxs ushbu muassasada o'qituvchi yoki kurator sifatida topilmadi. Boshidan urinib ko'ring.</p>
+            </div>
+          </div>
         </div>
 
         <form onsubmit="handleTeacherLogin(event)" class="space-y-4">
           <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">O'qituvchi F.I.SH *</label>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">O'qituvchi / Kurator F.I.SH *</label>
             <div class="relative">
               <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
                 <i class="fa-solid fa-chalkboard-user"></i>
               </span>
-              <input id="teach-name" type="text" required placeholder="Masalan: Karimov Bobur" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <input id="teach-name" type="text" required placeholder="Masalan: Rejabov Abbos yoki Yakubov Muhammadaziz" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500">
             </div>
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Telefon raqami *</label>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Telefon raqami (Kod) *</label>
             <div class="relative flex items-center">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <span class="text-slate-800 font-black text-xs sm:text-sm font-mono bg-slate-200/90 px-2.5 py-1.5 rounded-lg border border-slate-300 flex items-center gap-1">
@@ -384,15 +391,20 @@
           </div>
 
           <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-700 hover:to-sky-700 text-white font-black rounded-xl shadow-lg transition active:scale-95 touch-btn">
-            O'qituvchi Jurnaliga Kirish
+            Kabinetga Kirish
           </button>
         </form>
 
-        <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
-          <span class="text-slate-400">Sinash uchun:</span>
-          <button onclick="fillTeacherDemo()" class="text-indigo-600 font-bold hover:underline touch-btn">
-            Karimov Bobur ma'lumotlarini qo'yish
-          </button>
+        <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs">
+          <span class="text-slate-400 font-medium">Sinash uchun namunalar:</span>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" onclick="fillTeacherDemo('teacher')" class="text-indigo-600 font-bold hover:underline bg-indigo-50 px-2.5 py-1 rounded-lg border border-indigo-200 touch-btn">
+              👨‍🏫 Rejabov Abbos (Fan ustozi)
+            </button>
+            <button type="button" onclick="fillTeacherDemo('curator')" class="text-purple-700 font-bold hover:underline bg-purple-50 px-2.5 py-1 rounded-lg border border-purple-200 touch-btn">
+              🏛️ Yakubov Muhammadaziz (Kurator - 9-"V")
+            </button>
+          </div>
         </div>
       </div>
 
@@ -667,15 +679,15 @@
     <div id="teacher-view" class="hidden space-y-4 sm:space-y-6">
       <div class="bg-gradient-to-r from-indigo-700 via-indigo-800 to-sky-800 rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-4">
         <div class="flex items-center gap-3 sm:gap-4 w-full md:w-auto">
-          <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-white/15 backdrop-blur border border-white/20 flex items-center justify-center text-2xl sm:text-3xl shadow-inner shrink-0">
-            👩‍🏫
+          <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-white/15 backdrop-blur border border-white/20 flex items-center justify-center text-2xl sm:text-3xl shadow-inner shrink-0" id="teacher-avatar-display">
+            👨‍🏫
           </div>
           <div>
-            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/20 text-[10px] font-black uppercase tracking-wider mb-0.5">
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/20 text-[10px] font-black uppercase tracking-wider mb-0.5" id="teacher-role-badge">
               O'qituvchi Portali
             </div>
             <h2 class="text-lg sm:text-2xl font-black" id="teacher-display-name">Ustoz Jurnali</h2>
-            <p class="text-[11px] sm:text-xs text-sky-200">
+            <p class="text-[11px] sm:text-xs text-sky-200" id="teacher-info-line">
               Fan: <span id="teacher-display-sub" class="font-bold text-white">---</span> | Tel: <span id="teacher-display-phone" class="font-mono text-amber-200">---</span>
             </p>
           </div>
@@ -697,8 +709,8 @@
               <i class="fa-solid fa-pen-to-square"></i>
             </div>
             <div>
-              <h3 class="font-black text-slate-800 text-sm sm:text-base">Baholash va Davomat</h3>
-              <p class="text-[11px] text-slate-400">Tezkor o'zgartirish</p>
+              <h3 class="font-black text-slate-800 text-sm sm:text-base" id="teacher-fast-action-title">Baholash va Davomat</h3>
+              <p class="text-[11px] text-slate-400" id="teacher-fast-action-desc">Tezkor o'zgartirish</p>
             </div>
           </div>
           
@@ -824,21 +836,44 @@
 
     const TEACHERS_DB = [
       {
-        fullName: "Karimov Bobur",
+        fullName: "Rejabov Abbos",
         rawDigits: "935552001",
         displayPhone: "+998 (93) 555-20-01",
         subject: "Matematika va Algebra",
+        teacherType: "teacher", // Dars beradigan maktab o'qituvchisi
         role: "teacher",
-        roleLabel: "Matematika Ustozi",
-        avatar: "👩‍🏫"
+        roleLabel: "Dars beruvchi Fan O'qituvchisi (Matematika)",
+        avatar: "👨‍🏫"
+      },
+      {
+        fullName: "Yakubov Muhammadaziz",
+        rawDigits: "941112233",
+        displayPhone: "+998 (94) 111-22-33",
+        curatorClass: "9-V", // 1 ta sinfga qaraydigan kurator (Sinf rahbari)
+        subject: "Barcha fanlar va sinf davomati",
+        teacherType: "curator", // Maktab kuratori
+        role: "teacher",
+        roleLabel: "Maktab Kuratori (9-\"V\" sinf rahbari)",
+        avatar: "👨‍🏫"
+      },
+      {
+        fullName: "Karimov Bobur",
+        rawDigits: "901234567",
+        displayPhone: "+998 (90) 123-45-67",
+        subject: "Fizika",
+        teacherType: "teacher",
+        role: "teacher",
+        roleLabel: "Dars beruvchi Fan O'qituvchisi (Fizika)",
+        avatar: "👨‍🏫"
       },
       {
         fullName: "Usmonova Dilnoza",
-        rawDigits: "941112233",
-        displayPhone: "+998 (94) 111-22-33",
+        rawDigits: "971112233",
+        displayPhone: "+998 (97) 111-22-33",
         subject: "Ona tili va Adabiyot",
+        teacherType: "teacher",
         role: "teacher",
-        roleLabel: "Ona tili Ustozi",
+        roleLabel: "Dars beruvchi Fan O'qituvchisi (Ona tili)",
         avatar: "👩‍🏫"
       }
     ];
@@ -1085,7 +1120,7 @@
       });
 
       if (!found) {
-        document.getElementById('director-error-msg').innerText = "Ma'lumotlar xato! Kiritilgan shaxs maktab direktori sifatida ro'yxatga olinmagan yoki uning nomidagi telefon raqami noto'g'ri. Boshidan urinib ko'ring.";
+        document.getElementById('director-error-msg').innerText = `Ma'lumotlar xato! Kiritilgan shaxs «${currentSchoolName}» direktori sifatida ro'yxatga olinmagan yoki uning nomidagi telefon raqami noto'g'ri. Boshidan urinib ko'ring.`;
         alertBox.classList.remove('hidden');
         return;
       }
@@ -1166,7 +1201,7 @@
       document.getElementById('zav-phone').value = "971234567";
     }
 
-    // C) O'QITUVCHILAR TEKSHIRUVI
+    // C) O'QITUVCHILAR VA KURATORLAR TEKSHIRUVI
     function handleTeacherLogin(e) {
       e.preventDefault();
       const nameInput = document.getElementById('teach-name').value.trim().toLowerCase();
@@ -1186,6 +1221,10 @@
       });
 
       if (!found) {
+        const errorMsg = document.getElementById('teacher-error-msg');
+        if (errorMsg) {
+          errorMsg.innerText = `Ma'lumotlar xato! Kiritilgan shaxs «${currentSchoolName}» o'qituvchisi yoki kuratori ro'yxatida topilmadi. Ism-familiya va kodni to'g'ri kiritganingizga ishonch hosil qiling.`;
+        }
         alertBox.classList.remove('hidden');
         return;
       }
@@ -1193,6 +1232,8 @@
       currentUser = {
         name: found.fullName,
         role: found.role,
+        teacherType: found.teacherType,
+        curatorClass: found.curatorClass || null,
         roleLabel: found.roleLabel,
         avatar: found.avatar,
         subject: found.subject,
@@ -1201,8 +1242,15 @@
       showUserDashboard();
     }
 
-    function fillTeacherDemo() {
-      document.getElementById('teach-name').value = "Karimov Bobur";
+    function fillTeacherDemo(type) {
+      if (type === 'curator') {
+        document.getElementById('teach-name').value = "Yakubov Muhammadaziz";
+        document.getElementById('teach-phone').value = "941112233";
+      } else {
+        document.getElementById('teach-name').value = "Rejabov Abbos";
+        document.getElementById('teach-phone').value = "935552001";
+      }
+    }
       document.getElementById('teach-phone').value = "935552001";
     }
 
@@ -1284,9 +1332,31 @@
       } else if (currentUser.role === 'teacher') {
         document.getElementById('teacher-view').classList.remove('hidden');
         document.getElementById('teacher-display-name').innerText = currentUser.name;
-        document.getElementById('teacher-display-sub').innerText = currentUser.subject;
         document.getElementById('teacher-display-phone').innerText = currentUser.phone;
+
+        const roleBadge = document.getElementById('teacher-role-badge');
+        const infoLine = document.getElementById('teacher-info-line');
+        const fastTitle = document.getElementById('teacher-fast-action-title');
+        const fastDesc = document.getElementById('teacher-fast-action-desc');
+
+        if (currentUser.teacherType === 'curator') {
+          roleBadge.innerText = `🏛️ Sinf Kuratori (${currentUser.curatorClass} sinf rahbari)`;
+          roleBadge.className = "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 text-[10px] font-black uppercase tracking-wider mb-0.5";
+          infoLine.innerHTML = `Biriktirilgan: <strong class="text-amber-300 font-black">${currentUser.curatorClass}-Sinf</strong> (Sinf Kuratori) | Tel: <span class="font-mono text-white">${currentUser.phone}</span>`;
+          if (fastTitle) fastTitle.innerText = "Sinf Nazorati va Davomat";
+          if (fastDesc) fastDesc.innerText = `${currentUser.curatorClass} sinf kuratori boshqaruvi`;
+        } else {
+          roleBadge.innerText = `📚 Fan O'qituvchisi (${currentUser.subject})`;
+          roleBadge.className = "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/20 text-[10px] font-black uppercase tracking-wider mb-0.5";
+          infoLine.innerHTML = `Dars beradigan fan: <strong class="text-white font-black">${currentUser.subject}</strong> | Tel: <span class="font-mono text-amber-200">${currentUser.phone}</span>`;
+          if (fastTitle) fastTitle.innerText = "Baholash va Davomat";
+          if (fastDesc) fastDesc.innerText = `${currentUser.subject} fani bo'yicha`;
+        }
+
         populateAllClassesDropdown('teacher-class-select');
+        if (currentUser.teacherType === 'curator' && currentUser.curatorClass) {
+          document.getElementById('teacher-class-select').value = currentUser.curatorClass;
+        }
         renderTeacherJournal();
       }
     }
@@ -1580,8 +1650,22 @@
           studentSelect.appendChild(opt);
         }
 
-        let subjData = s.subjectGrades && s.subjectGrades[currentUser.subject] ? s.subjectGrades[currentUser.subject] : { daily: [] };
-        const currentBadges = subjData.daily.map(d => `<span class="grade-badge grade-${d.grade} mr-1" title="${d.date}">${d.grade}</span>`).join('');
+        let currentBadges = '';
+        if (currentUser.teacherType === 'curator') {
+          // Kurator uchun barcha fanlardagi so'nggi baholar
+          const subjEntries = Object.entries(s.subjectGrades || {});
+          const badgesList = [];
+          subjEntries.forEach(([subj, data]) => {
+            if (data.daily && data.daily.length > 0) {
+              const last = data.daily[data.daily.length - 1];
+              badgesList.push(`<span class="grade-badge grade-${last.grade} mr-1" title="${subj}: ${last.grade}">${last.grade}</span>`);
+            }
+          });
+          currentBadges = badgesList.length > 0 ? badgesList.join('') : '<span class="text-xs text-slate-400">---</span>';
+        } else {
+          let subjData = s.subjectGrades && s.subjectGrades[currentUser.subject] ? s.subjectGrades[currentUser.subject] : { daily: [] };
+          currentBadges = subjData.daily.map(d => `<span class="grade-badge grade-${d.grade} mr-1" title="${d.date}">${d.grade}</span>`).join('');
+        }
         
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-slate-50 transition';
@@ -1629,10 +1713,11 @@
         
         if (grade !== "") {
           if (!student.subjectGrades) student.subjectGrades = {};
-          let subjData = student.subjectGrades[currentUser.subject];
+          const subjKey = (currentUser.teacherType === 'curator') ? "Matematika va Algebra" : currentUser.subject;
+          let subjData = student.subjectGrades[subjKey];
           if (!subjData) {
              subjData = { daily: [], chorak1: null, obshi: null };
-             student.subjectGrades[currentUser.subject] = subjData;
+             student.subjectGrades[subjKey] = subjData;
           }
           const d = new Date();
           const dateStr = String(d.getDate()).padStart(2, '0') + '.' + String(d.getMonth() + 1).padStart(2, '0');
@@ -1643,9 +1728,10 @@
         renderTeacherJournal();
         
         const successBox = document.getElementById('fast-action-success');
+        const roleNotice = (currentUser.teacherType === 'curator') ? "(Kurator tomonidan saqlandi)" : `(${currentUser.subject})`;
         successBox.innerHTML = `
           <i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i>
-          Saqlandi: <strong>${student.name}</strong>
+          Saqlandi: <strong>${student.name}</strong> ${roleNotice}
         `;
         successBox.classList.remove('hidden');
         setTimeout(() => { successBox.classList.add('hidden'); }, 3000);
