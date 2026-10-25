@@ -1,0 +1,1850 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>e-Maktab (Kundalik.com) — Davlat Umumta'lim Maktablari Portali</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    .grade-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.1rem;
+      height: 2.1rem;
+      border-radius: 0.65rem;
+      font-weight: 800;
+      font-size: 0.95rem;
+    }
+    .grade-5 { background: #dcfce7; color: #15803d; border: 1.5px solid #86efac; }
+    .grade-4 { background: #e0f2fe; color: #0369a1; border: 1.5px solid #7dd3fc; }
+    .grade-3 { background: #fef3c7; color: #b45309; border: 1.5px solid #fcd34d; }
+    .grade-2 { background: #fee2e2; color: #b91c1c; border: 1.5px solid #fca5a5; }
+    
+    .touch-btn {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    /* Raqam inputidagi tepaga-pastga strelkalarni yo'qotish (faqat qo'lda yoziladi) */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+    .scrollbar-thin::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-orange-500 selection:text-white">
+
+  <!-- YUQORI PANEL (NAVBAR) -->
+  <header class="bg-gradient-to-r from-sky-800 via-indigo-900 to-slate-900 text-white shadow-xl sticky top-0 z-40 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16 sm:h-20">
+        
+        <!-- Maktab Logosi va Nomi -->
+        <div class="flex items-center gap-2.5 sm:gap-3">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white/10 backdrop-blur border border-white/20 flex items-center justify-center text-white text-xl sm:text-2xl shadow-inner shrink-0">
+            <i class="fa-solid fa-school"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="font-black text-base sm:text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-sky-100 to-amber-200">e-MAKTAB</span>
+              <span class="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Kundalik.com
+              </span>
+            </div>
+            <p id="top-school-name" class="text-[10px] sm:text-xs text-sky-200 font-semibold truncate max-w-[200px] sm:max-w-md">
+              1-Sonli IDUM
+            </p>
+          </div>
+        </div>
+
+        <!-- Foydalanuvchi Holati / Chiqish -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <!-- IDUM / Maktabni almashtirish tugmasi (Headerda) -->
+          <button onclick="promptSchoolChange()" class="text-xs bg-white/10 hover:bg-white/20 border border-white/20 text-sky-100 px-2.5 sm:px-3 py-1.5 rounded-xl font-bold transition flex items-center gap-1.5 touch-btn">
+            <i class="fa-solid fa-arrows-rotate text-[11px] text-amber-300"></i>
+            <span class="hidden md:inline">IDUM / Maktab</span>
+            <span class="md:hidden">Almashtirish</span>
+          </button>
+
+          <div id="user-pill" class="hidden items-center gap-2 bg-white/10 border border-white/15 px-2.5 py-1 rounded-xl">
+            <div class="text-right">
+              <div id="user-name" class="text-xs font-bold leading-tight max-w-[120px] truncate">Foydalanuvchi</div>
+              <div id="user-role-badge" class="text-[9px] text-amber-300 font-semibold truncate">Rol</div>
+            </div>
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/20 flex items-center justify-center font-bold text-xs sm:text-sm shrink-0" id="user-avatar">
+              👑
+            </div>
+          </div>
+
+          <button id="logout-btn" onclick="logout()" class="hidden px-3 py-1.5 rounded-xl bg-red-500/20 hover:bg-red-500 text-red-200 hover:text-white border border-red-400/30 text-xs font-bold transition items-center gap-1.5 touch-btn">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i> <span class="hidden sm:inline">Chiqish</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ASOSIY QISM -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
+
+    <!-- 0. IDUM TANLASH BANNERI -->
+    <section id="school-selector-banner" class="mb-5 bg-gradient-to-r from-sky-900 to-indigo-950 rounded-3xl p-4 sm:p-5 text-white shadow-lg border border-sky-700/40">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
+        <div>
+          <div class="flex items-center gap-2 text-amber-400 text-xs font-extrabold uppercase tracking-wider">
+            <i class="fa-solid fa-building-columns"></i>
+            <span>IDUM Axborot Tizimi (Kundalik.com Sinxron)</span>
+          </div>
+          <h1 class="text-base sm:text-xl font-black mt-0.5" id="current-school-heading">
+            1-Sonli IDUM
+          </h1>
+          <p class="text-[11px] sm:text-xs text-sky-200 mt-0.5">
+            5-11 sinf o'quvchilari Kundalik.com tizimidan avtomatik ajratilgan. Bittalab kiritish shart emas!
+          </p>
+        </div>
+
+        <!-- IDUM va Maktab tanlash hamda Raqamini yozish -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-black/35 p-2 rounded-2xl border border-white/15 shadow-inner">
+          
+          <!-- IDUM / Maktab tugmalari -->
+          <div class="inline-flex p-1 bg-black/30 rounded-xl border border-white/10 gap-1">
+            <button type="button" id="btn-type-idum" onclick="setSchoolType('idum')" class="px-3 py-1.5 rounded-lg text-xs font-black transition flex items-center justify-center gap-1.5 bg-amber-400 text-slate-950 shadow-sm active:scale-95 touch-btn">
+              <span>🏛️</span>
+              <span>IDUM</span>
+            </button>
+            <button type="button" id="btn-type-maktab" onclick="setSchoolType('maktab')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 touch-btn">
+              <span>🏫</span>
+              <span>Maktab</span>
+            </button>
+          </div>
+
+          <!-- Sonini kiritish (strelkalarsiz, faqat qo'lda yoziladi) -->
+          <div class="relative flex-1 sm:w-28">
+            <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-sky-300 font-black text-xs pointer-events-none">№</span>
+            <input id="custom-school-num" type="number" min="1" max="999" placeholder="1" value="1" class="w-full pl-7 pr-2.5 py-2 bg-white/15 text-white placeholder-sky-300 text-xs font-black rounded-xl border border-white/20 focus:outline-none focus:ring-2 focus:ring-amber-400 text-center sm:text-left">
+          </div>
+
+          <!-- Tanlash tugmasi -->
+          <button onclick="applyCustomSchool()" class="px-4 py-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black text-xs rounded-xl shadow-md transition active:scale-95 touch-btn flex items-center justify-center gap-1.5 whitespace-nowrap">
+            <span>Tanlash</span>
+            <i class="fa-solid fa-arrow-right text-[11px]"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tezkor Maktab Metriklari -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4 pt-3 border-t border-white/10 text-xs">
+        <div class="bg-white/5 rounded-xl p-2.5 border border-white/10">
+          <div class="text-[10px] text-sky-300 uppercase font-bold">Jami O'quvchilar</div>
+          <div class="text-base sm:text-lg font-black text-white mt-0.5" id="metric-total-students">--- nafar</div>
+        </div>
+        <div class="bg-white/5 rounded-xl p-2.5 border border-white/10">
+          <div class="text-[10px] text-sky-300 uppercase font-bold">5-11 Sinflar</div>
+          <div class="text-base sm:text-lg font-black text-amber-300 mt-0.5" id="metric-total-classes">28 ta sinf</div>
+        </div>
+        <div class="bg-white/5 rounded-xl p-2.5 border border-white/10">
+          <div class="text-[10px] text-sky-300 uppercase font-bold">Bugungi Davomat</div>
+          <div class="text-base sm:text-lg font-black text-emerald-400 mt-0.5" id="metric-school-attend">---%</div>
+        </div>
+        <div class="bg-white/5 rounded-xl p-2.5 border border-white/10 flex items-center justify-between">
+          <div>
+            <div class="text-[10px] text-sky-300 uppercase font-bold">Kundalik.com</div>
+            <div class="text-xs font-black text-emerald-300 mt-0.5 flex items-center gap-1">
+              <i class="fa-solid fa-cloud-arrow-down"></i> Sinxronlangan
+            </div>
+          </div>
+          <button onclick="reSyncKundalik()" title="Kundalikdan qayta yuklash" class="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center text-sky-200 transition touch-btn active:scale-95">
+            <i class="fa-solid fa-rotate text-xs"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 1. AVTORIZATSIYA: 4 TA ROL (DIREKTOR, ZAUCH, O'QITUVCHI, O'QUVCHI) -->
+    <div id="login-view" class="max-w-xl mx-auto py-2 sm:py-4 space-y-4">
+      
+      <!-- ROL TABLARI (4 TA ROL) -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 bg-slate-200/90 p-1.5 rounded-2xl shadow-inner">
+        <button onclick="switchLoginTab('director')" id="tab-btn-director" class="py-2.5 px-2 rounded-xl text-xs font-black transition text-orange-900 bg-white shadow-sm flex items-center justify-center gap-1.5 touch-btn">
+          <span>👑</span> <span>Direktor</span>
+        </button>
+        <button onclick="switchLoginTab('zavuch')" id="tab-btn-zavuch" class="py-2.5 px-2 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 touch-btn">
+          <span>📋</span> <span>Zavuch</span>
+        </button>
+        <button onclick="switchLoginTab('teacher')" id="tab-btn-teacher" class="py-2.5 px-2 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 touch-btn">
+          <span>👩‍🏫</span> <span>O'qituvchi</span>
+        </button>
+        <button onclick="switchLoginTab('student')" id="tab-btn-student" class="py-2.5 px-2 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 touch-btn">
+          <span>👨‍🎓</span> <span>O'quvchi</span>
+        </button>
+      </div>
+
+      <!-- A) DIREKTOR KIRISHI (+998 AVTOMATIK) -->
+      <div id="login-director-section" class="bg-white rounded-3xl p-5 sm:p-7 border border-slate-200 shadow-xl space-y-5">
+        <div class="text-center">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-600 text-white mx-auto flex items-center justify-center text-2xl mb-3 shadow-md shadow-orange-500/20">
+            👑
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900">Maktab Direktori Kirishi</h2>
+          <p class="text-xs text-slate-500 mt-1">Direktor nomiga rasmiylashtirilgan telefon raqami orqali tasdiqlash</p>
+        </div>
+
+        <!-- Xatolik oynasi -->
+        <div id="director-error-alert" class="hidden p-4 rounded-2xl bg-red-50 border border-red-200 text-red-800 text-xs">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-xl bg-red-100 text-red-600 flex items-center justify-center text-sm shrink-0 font-bold">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div>
+              <h4 class="font-extrabold text-sm text-red-900">Ma'lumotlar xato!</h4>
+              <p class="mt-0.5" id="director-error-msg">Kiritilgan F.I.SH yoki telefon raqami maktab direktori bazasida mavjud emas. Boshidan urinib ko'ring.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1-Qadam: Ism va 9 xonali raqam -->
+        <div id="director-step-1" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Direktor F.I.SH *</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                <i class="fa-solid fa-user-tie"></i>
+              </span>
+              <input id="dir-name" type="text" placeholder="Masalan: Abdullayev Jasur" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Direktor Telefon raqami *</label>
+            <div class="relative flex items-center">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span class="text-slate-800 font-black text-xs sm:text-sm font-mono bg-slate-200/90 px-2.5 py-1.5 rounded-lg border border-slate-300 flex items-center gap-1">
+                  🇺🇿 +998
+                </span>
+              </div>
+              <input id="dir-phone" type="tel" maxlength="9" placeholder="90 123 45 67" class="w-full pl-28 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold tracking-wider focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition">
+            </div>
+            <p class="text-[11px] text-slate-400 mt-1">Faqat 9 xonali raqamni yozing (+998 avtomatik qo'shiladi)</p>
+          </div>
+
+          <button onclick="verifyDirectorAndSendCode()" class="w-full py-3.5 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-black rounded-xl shadow-lg shadow-orange-500/25 transition active:scale-95 touch-btn flex items-center justify-center gap-2">
+            <span>Kodni jo'natish (SMS)</span> <i class="fa-solid fa-arrow-right text-xs"></i>
+          </button>
+        </div>
+
+        <!-- 2-Qadam: SMS Tasdiqlash -->
+        <div id="director-step-2" class="hidden space-y-4">
+          <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs">
+            <div class="flex items-center gap-2 font-bold mb-1">
+              <i class="fa-solid fa-comment-sms text-amber-600 text-sm"></i>
+              <span>SMS Tasdiqlash Kodi:</span>
+            </div>
+            <p id="sms-code-preview" class="text-slate-600"></p>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">SMS Kodni kiriting *</label>
+            <input id="dir-sms-input" type="text" maxlength="4" placeholder="7777" class="w-full text-center tracking-widest text-2xl font-mono font-black py-3 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition">
+          </div>
+
+          <div class="flex gap-2">
+            <button onclick="resetDirectorLogin()" class="w-1/3 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition touch-btn">
+              Orqaga
+            </button>
+            <button onclick="confirmDirectorSMS()" class="w-2/3 py-3 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 text-white font-black rounded-xl shadow-lg transition active:scale-95 touch-btn">
+              Tasdiqlash va Kirish
+            </button>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+          <span class="text-slate-400">Sinash uchun:</span>
+          <button onclick="fillDirectorDemo()" class="text-orange-600 font-bold hover:underline touch-btn">
+            Namunani to'ldirish (Abdullayev J.)
+          </button>
+        </div>
+      </div>
+
+      <!-- B) MAKTAB ZAUCHI (O'QUV ISHLARI BO'YICHA O'RINBOSAR) -->
+      <div id="login-zavuch-section" class="hidden bg-white rounded-3xl p-5 sm:p-7 border border-slate-200 shadow-xl space-y-5">
+        <div class="text-center">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white mx-auto flex items-center justify-center text-2xl mb-3 shadow-md shadow-purple-500/20">
+            📋
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900">Maktab Zauchi (O'rinbosar)</h2>
+          <p class="text-xs text-slate-500 mt-1">O'quv ishlari va butun sinflar davomati nazoratchisi</p>
+        </div>
+
+        <div id="zavuch-error-alert" class="hidden p-4 rounded-2xl bg-red-50 border border-red-200 text-red-800 text-xs">
+          <h4 class="font-extrabold text-sm text-red-900">Ma'lumotlar xato!</h4>
+          <p class="mt-0.5">Kiritilgan shaxs maktab zauchi ro'yxatida topilmadi. Boshidan urinib ko'ring.</p>
+        </div>
+
+        <form onsubmit="handleZavuchLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Zavuch F.I.SH *</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                <i class="fa-solid fa-clipboard-user"></i>
+              </span>
+              <input id="zav-name" type="text" required placeholder="Masalan: Rahimova Feruza" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-purple-500">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Telefon raqami *</label>
+            <div class="relative flex items-center">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span class="text-slate-800 font-black text-xs sm:text-sm font-mono bg-slate-200/90 px-2.5 py-1.5 rounded-lg border border-slate-300 flex items-center gap-1">
+                  🇺🇿 +998
+                </span>
+              </div>
+              <input id="zav-phone" type="tel" maxlength="9" required placeholder="97 123 45 67" class="w-full pl-28 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold tracking-wider focus:outline-none focus:ring-2 focus:ring-purple-500">
+            </div>
+            <p class="text-[11px] text-slate-400 mt-1">Faqat 9 xonali raqamni yozing</p>
+          </div>
+
+          <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-black rounded-xl shadow-lg transition active:scale-95 touch-btn">
+            Zavuch Kabinetiga Kirish
+          </button>
+        </form>
+
+        <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+          <span class="text-slate-400">Sinash uchun:</span>
+          <button onclick="fillZavuchDemo()" class="text-purple-600 font-bold hover:underline touch-btn">
+            Rahimova Feruza ma'lumotlarini qo'yish
+          </button>
+        </div>
+      </div>
+
+      <!-- C) O'QITUVCHILAR UCHUN (+998 AVTOMATIK) -->
+      <div id="login-teacher-section" class="hidden bg-white rounded-3xl p-5 sm:p-7 border border-slate-200 shadow-xl space-y-5">
+        <div class="text-center">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-500 to-sky-600 text-white mx-auto flex items-center justify-center text-2xl mb-3 shadow-md shadow-indigo-500/20">
+            👩‍🏫
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900">O'qituvchilar Portali</h2>
+          <p class="text-xs text-slate-500 mt-1">Ustozlar o'z ism-familiyasi va telefon raqami bilan kiradi</p>
+        </div>
+
+        <div id="teacher-error-alert" class="hidden p-4 rounded-2xl bg-red-50 border border-red-200 text-red-800 text-xs">
+          <h4 class="font-extrabold text-sm text-red-900">Ma'lumotlar xato!</h4>
+          <p class="mt-0.5">Ushbu o'qituvchi maktab o'qituvchilari ro'yxatida topilmadi. Boshidan urinib ko'ring.</p>
+        </div>
+
+        <form onsubmit="handleTeacherLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">O'qituvchi F.I.SH *</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                <i class="fa-solid fa-chalkboard-user"></i>
+              </span>
+              <input id="teach-name" type="text" required placeholder="Masalan: Karimov Bobur" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Telefon raqami *</label>
+            <div class="relative flex items-center">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span class="text-slate-800 font-black text-xs sm:text-sm font-mono bg-slate-200/90 px-2.5 py-1.5 rounded-lg border border-slate-300 flex items-center gap-1">
+                  🇺🇿 +998
+                </span>
+              </div>
+              <input id="teach-phone" type="tel" maxlength="9" required placeholder="93 555 20 01" class="w-full pl-28 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold tracking-wider focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <p class="text-[11px] text-slate-400 mt-1">Faqat 9 xonali raqamni kiriting</p>
+          </div>
+
+          <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-700 hover:to-sky-700 text-white font-black rounded-xl shadow-lg transition active:scale-95 touch-btn">
+            O'qituvchi Jurnaliga Kirish
+          </button>
+        </form>
+
+        <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+          <span class="text-slate-400">Sinash uchun:</span>
+          <button onclick="fillTeacherDemo()" class="text-indigo-600 font-bold hover:underline touch-btn">
+            Karimov Bobur ma'lumotlarini qo'yish
+          </button>
+        </div>
+      </div>
+
+      <!-- D) O'QUVCHI UCHUN -->
+      <div id="login-student-section" class="hidden bg-white rounded-3xl p-5 sm:p-7 border border-slate-200 shadow-xl space-y-5">
+        <div class="text-center">
+          <div class="w-14 h-14 rounded-2xl bg-sky-100 text-sky-600 mx-auto flex items-center justify-center text-2xl mb-3">
+            👨‍🎓
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900">O'quvchi Kundaligi</h2>
+          <p class="text-xs text-slate-500 mt-1">O'zingizning shaxsiy ID kodingiz orqali kiring</p>
+        </div>
+
+        <form onsubmit="handleStudentLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Shaxsiy ID Kod *</label>
+            <input id="stud-id" type="text" required placeholder="Masalan: OQ-9V-01" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-sky-500">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Parol *</label>
+            <input id="stud-pwd" type="password" required value="1234" placeholder="••••••••" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+          </div>
+
+          <button type="submit" class="w-full py-3.5 bg-sky-600 hover:bg-sky-700 text-white font-black rounded-xl shadow-lg transition active:scale-95 touch-btn">
+            Kundalikni Ochish
+          </button>
+        </form>
+
+        <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+          <span class="text-slate-400">Sinash uchun:</span>
+          <button onclick="fillStudentDemo()" class="text-sky-600 font-bold hover:underline touch-btn">
+            Namunaviy o'quvchi (9-"V" Alisher Q.)
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 2. DIREKTOR VA ZAUCH KABINETI (ADMIN VIEW) -->
+    <div id="admin-view" class="hidden space-y-4 sm:space-y-6">
+      
+      <!-- Yuqori Boshqaruv Plitkasi -->
+      <div id="admin-header-card" class="bg-gradient-to-r from-amber-500 via-orange-600 to-amber-700 rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3 sm:gap-4 w-full md:w-auto">
+          <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-white/20 backdrop-blur border border-white/30 flex items-center justify-center text-2xl sm:text-3xl shadow-inner shrink-0" id="admin-header-icon">
+            👑
+          </div>
+          <div>
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/20 text-[10px] font-black uppercase tracking-wider mb-0.5">
+              <span id="admin-badge-label">Tasdiqlangan Rahbar</span> • Kundalik.com Baza
+            </div>
+            <h2 class="text-lg sm:text-2xl font-black" id="director-display-title">Maktab Direktori Paneli</h2>
+            <p class="text-[11px] sm:text-xs text-amber-100" id="admin-school-subtitle">5-11 sinflar o'quvchilari avtomatik shakllantirilgan.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 w-full md:w-auto">
+          <div class="bg-black/20 backdrop-blur h-[72px] rounded-2xl border border-white/10 flex flex-col items-center justify-center text-center px-4">
+            <div class="text-[10px] font-bold text-amber-200 uppercase tracking-wide">Ushbu Sinfda</div>
+            <div class="text-2xl font-black leading-none mt-1" id="admin-student-count">0</div>
+          </div>
+          <div class="bg-black/20 backdrop-blur h-[72px] rounded-2xl border border-white/10 flex flex-col items-center justify-center text-center px-4">
+            <div class="text-[10px] font-bold text-amber-200 uppercase tracking-wide">Sinf Davomati</div>
+            <div class="text-2xl font-black text-emerald-300 leading-none mt-1" id="admin-attendance-pct">0%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tezkor Sinf Tugmalari (5-11 Sinflar) -->
+      <div class="bg-white rounded-2xl p-3 border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between gap-2 mb-2 pb-1.5 border-b border-slate-100">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-layer-group text-orange-600 text-sm"></i>
+            <span class="text-xs font-black text-slate-800 uppercase tracking-wide">Tezkor Sinflar Tanlovi (5-11):</span>
+          </div>
+          <span class="text-[11px] text-slate-400 font-semibold">Har bir sinf Kundalikdan to'ldirilgan</span>
+        </div>
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-thin" id="quick-class-pills">
+          <!-- JS orqali sinf tugmalari chiqadi -->
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-4 sm:gap-6">
+        <!-- CHAP: O'quvchi qo'shish / Qidirish -->
+        <div id="admin-left-panel" class="lg:col-span-4 bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-sm space-y-4">
+          <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+            <div class="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-base shrink-0">
+              <i class="fa-solid fa-user-plus"></i>
+            </div>
+            <div>
+              <h3 class="font-black text-slate-800 text-sm sm:text-base">O'quvchi Qo'shish</h3>
+              <p class="text-[11px] text-slate-400">Yangi o'quvchi qo'shmoqchi bo'lsangiz</p>
+            </div>
+          </div>
+
+          <form onsubmit="handleCreateStudent(event)" class="space-y-3.5">
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">O'quvchi F.I.SH *</label>
+              <input id="new-student-name" type="text" required placeholder="Masalan: Sobirov Jasur" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500">
+            </div>
+
+            <div class="grid grid-cols-2 gap-2.5 p-2.5 bg-orange-50/70 rounded-xl border border-orange-200">
+              <div>
+                <label class="block text-[10px] font-black text-orange-900 mb-1">Sinf (5 — 11) *</label>
+                <select id="new-student-grade-num" onchange="syncFromLeftToRight()" class="w-full px-2.5 py-2 bg-white border border-orange-300 rounded-lg text-xs font-black text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                  <option value="5">5-sinf</option>
+                  <option value="6">6-sinf</option>
+                  <option value="7">7-sinf</option>
+                  <option value="8">8-sinf</option>
+                  <option value="9" selected>9-sinf</option>
+                  <option value="10">10-sinf</option>
+                  <option value="11">11-sinf</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[10px] font-black text-orange-900 mb-1">Harfi (Liter) *</label>
+                <select id="new-student-letter" onchange="syncFromLeftToRight()" class="w-full px-2.5 py-2 bg-white border border-orange-300 rounded-lg text-xs font-black text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                  <option value="A">"A" sinf</option>
+                  <option value="B">"B" sinf</option>
+                  <option value="V" selected>"V" sinf</option>
+                  <option value="G">"G" sinf</option>
+                  <option value="D">"D" sinf</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">Boshlang'ich Davomat</label>
+              <select id="new-student-attend" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:ring-2 focus:ring-orange-500">
+                <option value="Darsda bor">✅ Darsda bor</option>
+                <option value="Sababli">⚠️ Sababli</option>
+                <option value="Sababsiz">❌ Sababsiz</option>
+              </select>
+            </div>
+
+            <button type="submit" class="w-full py-3 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-bold rounded-xl text-xs sm:text-sm shadow-md transition active:scale-95 touch-btn">
+              <i class="fa-solid fa-plus mr-1"></i> Ro'yxatga kiritish
+            </button>
+          </form>
+
+          <div id="new-student-success" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold"></div>
+
+          <!-- Kundalikdan yangilash eslatmasi -->
+          <div class="p-3 bg-sky-50 rounded-2xl border border-sky-200 text-sky-900 text-xs space-y-1">
+            <div class="font-bold flex items-center gap-1.5 text-sky-800">
+              <i class="fa-solid fa-cloud-check text-sky-600"></i> Kundalik.com Sinxronizatsiyasi
+            </div>
+            <p class="text-[11px] text-slate-600">
+              Ushbu maktab uchun 5-A dan 11-D gacha bo'lgan barcha o'quvchilar avtomatik yaratilgan. O'quvchilarni bittalab qo'shishingiz shart emas.
+            </p>
+          </div>
+        </div>
+
+        <!-- O'NG: O'quvchilar ro'yxati (Avtomatik to'ldirilgan) -->
+        <div id="admin-right-panel" class="lg:col-span-8 bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-4 pb-3 border-b border-slate-100">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+                <h3 class="font-black text-slate-900 text-sm sm:text-base tracking-tight" id="admin-table-title">9-"V" Sinf O'quvchilari</h3>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-0.5">Davomat tugmasini bosib darhol o'zgartirishingiz mumkin</p>
+            </div>
+            
+            <div class="flex items-center gap-2 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-xl self-start sm:self-auto">
+              <span class="text-[11px] text-slate-700 font-black uppercase shrink-0">Sinf:</span>
+              <select id="admin-filter-class" onchange="syncFromRightToLeft()" class="bg-white border border-slate-300 rounded-lg px-2.5 py-1 text-xs font-black text-slate-900 focus:outline-none">
+                <!-- JS orqali 5-A dan 11-D gacha to'ldiriladi -->
+              </select>
+            </div>
+          </div>
+
+          <!-- Kompyuter jadvali -->
+          <div class="hidden md:block overflow-x-auto border border-slate-100 rounded-2xl">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="text-slate-400 uppercase bg-slate-50 border-b border-slate-100 text-[11px]">
+                  <th class="py-3 px-3 w-10">#</th>
+                  <th class="py-3 px-3 w-28">ID Kod</th>
+                  <th class="py-3 px-3">O'quvchi F.I.SH (Kundalik.com)</th>
+                  <th class="py-3 px-3 text-center w-20">Sinfi</th>
+                  <th class="py-3 px-3 text-center w-44">Bugungi Davomat</th>
+                  <th class="py-3 px-3 text-right w-24">Amal</th>
+                </tr>
+              </thead>
+              <tbody id="admin-students-tbody" class="divide-y divide-slate-100 font-medium"></tbody>
+            </table>
+          </div>
+
+          <!-- Telefon kartalari -->
+          <div id="admin-students-mobile-cards" class="md:hidden space-y-3"></div>
+
+          <div id="admin-empty-state" class="hidden py-10 text-center text-slate-400">
+            <i class="fa-regular fa-folder-open text-3xl mb-2 text-slate-300"></i>
+            <p class="font-bold text-xs text-slate-600" id="admin-empty-title">Bu sinfda o'quvchi yo'q.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 3. O'QUVCHI ELEKTRON KUNDALIGI -->
+    <div id="student-view" class="hidden space-y-4 sm:space-y-6">
+      <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3 w-full md:w-auto">
+          <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-600 text-white flex items-center justify-center text-xl sm:text-2xl font-black shadow-md shrink-0" id="student-avatar-initials">
+            OQ
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-lg sm:text-xl font-extrabold text-slate-900" id="student-profile-name">O'quvchi</h2>
+              <span class="px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 text-[11px] font-bold" id="student-profile-class">Sinf</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5">Shaxsiy ID: <strong class="font-mono text-slate-700" id="student-profile-id">---</strong></p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2.5 w-full md:w-auto">
+          <div class="bg-slate-50 h-[68px] rounded-2xl border border-slate-200 flex flex-col items-center justify-center text-center px-4">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">O'rtacha Baho</div>
+            <div class="text-xl font-black text-emerald-600 leading-none mt-1" id="student-avg-grade">4.8</div>
+          </div>
+          <div class="bg-slate-50 h-[68px] rounded-2xl border border-slate-200 flex flex-col items-center justify-center text-center px-4">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Bugungi Davomat</div>
+            <div class="text-xs font-black text-emerald-600 leading-none mt-1.5" id="student-status-badge">Darsda bor</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-4 sm:gap-6">
+        <div class="lg:col-span-8 space-y-4 sm:space-y-6">
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-book-bookmark text-sky-600 text-base"></i>
+                <h3 class="font-extrabold text-slate-800 text-sm sm:text-base">Elektron Baholar Jurnali (Kundalik.com)</h3>
+              </div>
+              <span class="text-[11px] bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded-full">3-Chorak</span>
+            </div>
+
+            <!-- Tabs container -->
+            <div class="flex overflow-x-auto gap-2 pb-3 mb-4 border-b border-slate-100 scrollbar-thin" id="student-subject-tabs">
+            </div>
+
+            <!-- Subject Details Container -->
+            <div id="student-subject-details" class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5">
+               <!-- Will be populated by JS -->
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-4 space-y-4 sm:space-y-6">
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-sm space-y-3">
+            <h3 class="font-black text-slate-900 text-sm flex items-center gap-2">
+              <i class="fa-regular fa-clock text-amber-500"></i> Bugungi Darslar
+            </h3>
+            <div id="student-today-lessons" class="space-y-2"></div>
+          </div>
+
+          <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-sm space-y-3">
+            <h3 class="font-black text-slate-900 text-sm flex items-center gap-2">
+              <i class="fa-solid fa-pen-nib text-indigo-500"></i> Uy Vazifalari
+            </h3>
+            <div id="student-homework-list" class="space-y-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. O'QITUVCHI JURNALI VA DAVOMAT KABINETI -->
+    <div id="teacher-view" class="hidden space-y-4 sm:space-y-6">
+      <div class="bg-gradient-to-r from-indigo-700 via-indigo-800 to-sky-800 rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3 sm:gap-4 w-full md:w-auto">
+          <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-white/15 backdrop-blur border border-white/20 flex items-center justify-center text-2xl sm:text-3xl shadow-inner shrink-0">
+            👩‍🏫
+          </div>
+          <div>
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/20 text-[10px] font-black uppercase tracking-wider mb-0.5">
+              O'qituvchi Portali
+            </div>
+            <h2 class="text-lg sm:text-2xl font-black" id="teacher-display-name">Ustoz Jurnali</h2>
+            <p class="text-[11px] sm:text-xs text-sky-200">
+              Fan: <span id="teacher-display-sub" class="font-bold text-white">---</span> | Tel: <span id="teacher-display-phone" class="font-mono text-amber-200">---</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 w-full md:w-auto bg-black/20 p-2 rounded-2xl border border-white/10">
+          <span class="text-xs font-bold text-sky-200 pl-2">Sinfni tanlang:</span>
+          <select id="teacher-class-select" onchange="renderTeacherJournal()" class="bg-white text-slate-900 border-none font-black text-xs sm:text-sm px-3 py-2 rounded-xl focus:outline-none">
+            <!-- JS orqali to'ldiriladi -->
+          </select>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-4 sm:gap-6">
+        <!-- CHAP PANEL: Tezkor Baholash va Davomat -->
+        <div class="lg:col-span-4 bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-sm space-y-4">
+          <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+            <div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-base shrink-0">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </div>
+            <div>
+              <h3 class="font-black text-slate-800 text-sm sm:text-base">Baholash va Davomat</h3>
+              <p class="text-[11px] text-slate-400">Tezkor o'zgartirish</p>
+            </div>
+          </div>
+          
+          <form onsubmit="handleTeacherFastAction(event)" class="space-y-4">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 mb-1">O'quvchini tanlang *</label>
+              <select id="fast-action-student" required class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <!-- JS orqali to'ldiriladi -->
+              </select>
+            </div>
+            
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 mb-1">Davomat Holati *</label>
+              <select id="fast-action-attendance" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="Darsda bor">✅ Darsda bor</option>
+                <option value="Sababli">⚠️ Sababli kirmagan</option>
+                <option value="Sababsiz">❌ Sababsiz kirmagan</option>
+              </select>
+            </div>
+
+            <div>
+               <label class="block text-[11px] font-bold text-slate-600 mb-1">Baho Qo'yish (Alohida)</label>
+               <select id="fast-action-grade" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  <option value="">-- Baho qo'ymaslik --</option>
+                  <option value="5">5 (A'lo)</option>
+                  <option value="4">4 (Yaxshi)</option>
+                  <option value="3">3 (Qoniqarli)</option>
+                  <option value="2">2 (Yomon)</option>
+               </select>
+            </div>
+
+            <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs sm:text-sm shadow-md transition active:scale-95 touch-btn">
+              <i class="fa-solid fa-check mr-1"></i> Saqlash
+            </button>
+          </form>
+          
+          <div id="fast-action-success" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold mt-2"></div>
+        </div>
+
+        <!-- O'NG PANEL: Sinf ro'yxati -->
+        <div class="lg:col-span-8 bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-sm space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div>
+              <h3 class="font-black text-slate-900 text-base" id="teacher-journal-title">Sinf Jurnali</h3>
+              <p class="text-xs text-slate-400">O'quvchilar ro'yxati va ularning joriy natijalari</p>
+            </div>
+          </div>
+
+          <div class="hidden md:block overflow-x-auto border border-slate-100 rounded-2xl">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="text-slate-400 uppercase bg-slate-50 border-b border-slate-100 text-[11px]">
+                  <th class="py-3 px-3 w-10">#</th>
+                  <th class="py-3 px-3 w-28">ID Kod</th>
+                  <th class="py-3 px-3">O'quvchi F.I.SH</th>
+                  <th class="py-3 px-3 text-center w-44">Davomat</th>
+                  <th class="py-3 px-3 text-center">Joriy Baholar</th>
+                </tr>
+              </thead>
+              <tbody id="teacher-students-tbody" class="divide-y divide-slate-100 font-medium"></tbody>
+            </table>
+          </div>
+
+          <div id="teacher-students-mobile-cards" class="md:hidden space-y-3"></div>
+
+          <div id="teacher-empty-state" class="hidden py-8 text-center text-slate-400 text-xs">
+            Ushbu sinfda o'quvchilar topilmadi.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- JAVASCRIPT: AVTOMATIK KUNDALIK.COM GENERATORI VA 4 TA ROL BAZASI -->
+  <script>
+    // 1. O'ZBEKCHA REAL ISM-FAMILIYALAR BAZASI (KUNDALIK.COM UCHUN)
+    const MALE_NAMES = [
+      "Jasur", "Alisher", "Bekzod", "Sardor", "Doniyor", "Shoxrux", "Temur", "Bobur",
+      "Farrux", "Javohir", "Ulug'bek", "Doston", "Azizbek", "Nodirbek", "Otabek", "Samandar",
+      "Bilol", "Muzaffar", "Sanjar", "Shohjahon", "Akrom", "Rustam", "Islom", "Bunyod"
+    ];
+    const FEMALE_NAMES = [
+      "Madina", "Nilufar", "Shahzoda", "Dilnoza", "Rayhona", "Sevara", "Gulnoza", "Komila",
+      "Malika", "Ziyoda", "Mohinur", "Durdona", "Sarvinoz", "Feruza", "Kamola", "Sabina",
+      "Nozima", "Munira", "Yulduz", "Charos", "Zarina", "Nargiza", "Umida", "Lobar"
+    ];
+    const SURNAMES = [
+      "Karimov", "Aliyev", "Rahimov", "Usmonov", "Abdullayev", "Toshev", "Ergashev",
+      "Qodirov", "Xolmatov", "Rustamov", "Saidov", "Umarov", "Shukurov", "G'aniyev",
+      "Nazarov", "Mahmudov", "Vohidov", "Mirzayev", "Yusupov", "Sharipov", "Ismoilov"
+    ];
+
+    // Boshlang'ich IDUM raqami va nomi
+    let currentSchoolType = 'idum';
+    let currentSchoolNumber = 1;
+    let currentSchoolName = "1-Sonli IDUM";
+
+    // 2. KADRLAR BAZASI (DIREKTOR, ZAUCH, USTOZLAR)
+    const DIRECTORS_DB = [
+      {
+        fullName: "Abdullayev Jasur",
+        rawDigits: "901234567",
+        displayPhone: "+998 (90) 123-45-67",
+        role: "admin",
+        roleLabel: "Maktab Direktori",
+        avatar: "👑",
+        smsCode: "7777"
+      }
+    ];
+
+    const ZAVUCH_DB = [
+      {
+        fullName: "Rahimova Feruza",
+        rawDigits: "971234567",
+        displayPhone: "+998 (97) 123-45-67",
+        role: "zavuch",
+        roleLabel: "Maktab Zauchi (O'rinbosar)",
+        avatar: "📋",
+        department: "O'quv-tarbiya ishlari"
+      }
+    ];
+
+    const TEACHERS_DB = [
+      {
+        fullName: "Karimov Bobur",
+        rawDigits: "935552001",
+        displayPhone: "+998 (93) 555-20-01",
+        subject: "Matematika va Algebra",
+        role: "teacher",
+        roleLabel: "Matematika Ustozi",
+        avatar: "👩‍🏫"
+      },
+      {
+        fullName: "Usmonova Dilnoza",
+        rawDigits: "941112233",
+        displayPhone: "+998 (94) 111-22-33",
+        subject: "Ona tili va Adabiyot",
+        role: "teacher",
+        roleLabel: "Ona tili Ustozi",
+        avatar: "👩‍🏫"
+      }
+    ];
+
+    // Oddiy psevdo-tasodifiy generator (bir xil maktab va sinf uchun bir xil o'quvchilar chiqishi uchun)
+    function pseudoRandom(seed) {
+      let x = Math.sin(seed++) * 10000;
+      return x - Math.floor(x);
+    }
+
+    // 🌟 KUNDALIK.COM DAN AVTOMATIK SINFLAR VA O'QUVCHILARNI YARATISH MOTORISI
+    function generateSchoolDataFromKundalik(schoolNum, type = currentSchoolType) {
+      const storageKey = `maktab_portal_v15_${type}_${schoolNum}`;
+      const cached = localStorage.getItem(storageKey);
+      if (cached) {
+        try {
+          return JSON.parse(cached);
+        } catch (e) {}
+      }
+
+      const students = [];
+      const letters = ['A', 'B', 'V', 'G'];
+      let globalSeed = (type === 'idum' ? schoolNum * 313 : schoolNum * 137);
+      let counter = 1;
+
+      // 5-sinfdan 11-sinfgacha har bir sinfda A, B, V, G
+      for (let grade = 5; grade <= 11; grade++) {
+        for (let l of letters) {
+          // Har bir sinfda 18 tadan 24 tagacha o'quvchi
+          const classSize = 18 + Math.floor(pseudoRandom(globalSeed++) * 6);
+          for (let i = 1; i <= classSize; i++) {
+            const isBoy = pseudoRandom(globalSeed++) > 0.5;
+            const firstName = isBoy 
+              ? MALE_NAMES[Math.floor(pseudoRandom(globalSeed++) * MALE_NAMES.length)]
+              : FEMALE_NAMES[Math.floor(pseudoRandom(globalSeed++) * FEMALE_NAMES.length)];
+            const baseSurname = SURNAMES[Math.floor(pseudoRandom(globalSeed++) * SURNAMES.length)];
+            const surname = isBoy ? baseSurname : baseSurname + "a";
+            
+            const randAttendVal = pseudoRandom(globalSeed++);
+            let attend = "Darsda bor";
+            if (randAttendVal < 0.08) attend = "Darsga kirmagan";
+            else if (randAttendVal < 0.16) attend = "Sababli";
+
+            const idxStr = i < 10 ? '0' + i : '' + i;
+            const studentId = `OQ-${grade}${l}-${idxStr}`;
+
+            // Baholar
+            const g1 = 4 + Math.floor(pseudoRandom(globalSeed++) * 2);
+            const g2 = 3 + Math.floor(pseudoRandom(globalSeed++) * 3);
+            const g3 = 4 + Math.floor(pseudoRandom(globalSeed++) * 2);
+
+            students.push({
+              id: studentId,
+              name: `${surname} ${firstName}`,
+              classNum: grade,
+              classLetter: l,
+              attendance: attend,
+              subjectGrades: {
+                "Matematika va Algebra": { daily: [{date: "01.09", grade: g1}, {date: "02.09", grade: g2}], chorak1: g1, obshi: g1 },
+                "Ona tili va Adabiyot": { daily: [{date: "01.09", grade: g2}, {date: "02.09", grade: g3}], chorak1: g3, obshi: g3 },
+                "Ingliz tili": { daily: [{date: "01.09", grade: 5}, {date: "02.09", grade: g1}], chorak1: 4, obshi: 5 },
+                "Fizika": { daily: [{date: "01.09", grade: g3}, {date: "02.09", grade: 4}], chorak1: g2, obshi: 4 }
+              },
+              pwd: '1234'
+            });
+            counter++;
+          }
+        }
+      }
+
+      const generatedName = (type === 'idum') ? `${schoolNum}-Sonli IDUM` : `${schoolNum}-Sonli Davlat Umumta'lim Maktabi`;
+
+      const dataObj = {
+        schoolNumber: schoolNum,
+        schoolType: type,
+        schoolName: generatedName,
+        nextId: counter + 1000,
+        classStudents: students
+      };
+
+      localStorage.setItem(storageKey, JSON.stringify(dataObj));
+      return dataObj;
+    }
+
+    let schoolData = generateSchoolDataFromKundalik(currentSchoolNumber, currentSchoolType);
+
+    function saveCurrentSchoolData() {
+      const storageKey = `maktab_portal_v15_${currentSchoolType}_${currentSchoolNumber}`;
+      localStorage.setItem(storageKey, JSON.stringify(schoolData));
+      updateSchoolMetricsUI();
+    }
+
+    function reSyncKundalik() {
+      const storageKey = `maktab_portal_v15_${currentSchoolType}_${currentSchoolNumber}`;
+      localStorage.removeItem(storageKey);
+      schoolData = generateSchoolDataFromKundalik(currentSchoolNumber, currentSchoolType);
+      alert(`${currentSchoolName} o'quvchilari Kundalik.com bazasidan qayta sinxronlandi! Jami: ${schoolData.classStudents.length} o'quvchi.`);
+      updateSchoolMetricsUI();
+      if (currentUser) {
+        if (currentUser.role === 'admin' || currentUser.role === 'zavuch') renderAdminDashboard();
+        else if (currentUser.role === 'teacher') renderTeacherJournal();
+      }
+    }
+
+    // IDUM va Maktab turini almashtirish
+    function setSchoolType(type) {
+      currentSchoolType = type;
+      const btnIdum = document.getElementById('btn-type-idum');
+      const btnMaktab = document.getElementById('btn-type-maktab');
+      
+      if (btnIdum && btnMaktab) {
+        if (type === 'idum') {
+          btnIdum.className = "px-3 py-1.5 rounded-lg text-xs font-black transition flex items-center justify-center gap-1.5 bg-amber-400 text-slate-950 shadow-sm active:scale-95 touch-btn";
+          btnMaktab.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 touch-btn";
+        } else {
+          btnMaktab.className = "px-3 py-1.5 rounded-lg text-xs font-black transition flex items-center justify-center gap-1.5 bg-amber-400 text-slate-950 shadow-sm active:scale-95 touch-btn";
+          btnIdum.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 touch-btn";
+        }
+      }
+    }
+
+    // Foydalanuvchi kiritgan IDUM yoki Maktab raqamini qo'llash
+    function applyCustomSchool() {
+      const numInput = document.getElementById('custom-school-num');
+      const val = parseInt(numInput.value);
+
+      if (!val || val < 1) {
+        const typeLabel = currentSchoolType === 'idum' ? 'IDUM' : 'Maktab';
+        alert(`Iltimos, ${typeLabel} raqamini to'g'ri yozing! (Masalan: 1 yoki 21)`);
+        if (numInput) numInput.focus();
+        return;
+      }
+
+      currentSchoolNumber = val;
+      const formattedName = (currentSchoolType === 'idum') 
+        ? `${val}-Sonli IDUM` 
+        : `${val}-Sonli Davlat Umumta'lim Maktabi`;
+      loadSchool(val, formattedName);
+    }
+
+    // Headerdagi "Muassasani almashtirish" tugmasi bosilganda
+    function promptSchoolChange() {
+      const banner = document.getElementById('school-selector-banner');
+      if (banner) {
+        banner.scrollIntoView({ behavior: 'smooth' });
+        const numInput = document.getElementById('custom-school-num');
+        if (numInput) {
+          numInput.focus();
+          numInput.select();
+        }
+      }
+    }
+
+    function loadSchool(num, name) {
+      currentSchoolNumber = num;
+      currentSchoolName = name || ((currentSchoolType === 'idum') ? `${num}-Sonli IDUM` : `${num}-Sonli Davlat Umumta'lim Maktabi`);
+      schoolData = generateSchoolDataFromKundalik(num, currentSchoolType);
+
+      document.getElementById('top-school-name').innerText = currentSchoolName;
+      document.getElementById('current-school-heading').innerText = currentSchoolName;
+      document.title = `${currentSchoolName} — Axborot Portali`;
+
+      const numInput = document.getElementById('custom-school-num');
+      if (numInput) numInput.value = num;
+
+      setSchoolType(currentSchoolType);
+
+      updateSchoolMetricsUI();
+
+      if (currentUser) {
+        if (currentUser.role === 'admin' || currentUser.role === 'zavuch') {
+          populateAllClassesDropdown('admin-filter-class');
+          renderAdminDashboard();
+        } else if (currentUser.role === 'teacher') {
+          populateAllClassesDropdown('teacher-class-select');
+          renderTeacherJournal();
+        }
+      }
+    }
+
+    function updateSchoolMetricsUI() {
+      const total = schoolData.classStudents.length;
+      document.getElementById('metric-total-students').innerText = `${total} nafar`;
+      
+      const present = schoolData.classStudents.filter(s => s.attendance === 'Darsda bor').length;
+      const pct = total > 0 ? ((present / total) * 100).toFixed(1) : 0;
+      document.getElementById('metric-school-attend').innerText = `${pct}%`;
+    }
+
+    // 3. AVTORIZATSIYA VA ROLLAT BILAN ISHLASH
+    let currentUser = null;
+    let pendingDirector = null;
+
+    function switchLoginTab(tab) {
+      document.getElementById('login-director-section').classList.add('hidden');
+      document.getElementById('login-zavuch-section').classList.add('hidden');
+      document.getElementById('login-teacher-section').classList.add('hidden');
+      document.getElementById('login-student-section').classList.add('hidden');
+
+      const tabs = ['director', 'zavuch', 'teacher', 'student'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (btn) {
+          btn.className = 'py-2.5 px-2 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 touch-btn';
+        }
+      });
+
+      const activeBtn = document.getElementById(`tab-btn-${tab}`);
+      if (tab === 'director') {
+        document.getElementById('login-director-section').classList.remove('hidden');
+        if (activeBtn) activeBtn.className = 'py-2.5 px-2 rounded-xl text-xs font-black transition text-orange-900 bg-white shadow-sm flex items-center justify-center gap-1.5 touch-btn';
+      } else if (tab === 'zavuch') {
+        document.getElementById('login-zavuch-section').classList.remove('hidden');
+        if (activeBtn) activeBtn.className = 'py-2.5 px-2 rounded-xl text-xs font-black transition text-purple-900 bg-white shadow-sm flex items-center justify-center gap-1.5 touch-btn';
+      } else if (tab === 'teacher') {
+        document.getElementById('login-teacher-section').classList.remove('hidden');
+        if (activeBtn) activeBtn.className = 'py-2.5 px-2 rounded-xl text-xs font-black transition text-indigo-900 bg-white shadow-sm flex items-center justify-center gap-1.5 touch-btn';
+      } else if (tab === 'student') {
+        document.getElementById('login-student-section').classList.remove('hidden');
+        if (activeBtn) activeBtn.className = 'py-2.5 px-2 rounded-xl text-xs font-black transition text-sky-900 bg-white shadow-sm flex items-center justify-center gap-1.5 touch-btn';
+      }
+    }
+
+    function getCleanDigits(p) {
+      return p.replace(/\D/g, '');
+    }
+
+    // A) DIREKTOR TEKSHIRUVI
+    function verifyDirectorAndSendCode() {
+      const nameInput = document.getElementById('dir-name').value.trim().toLowerCase();
+      let phoneInput = getCleanDigits(document.getElementById('dir-phone').value.trim());
+
+      if (phoneInput.startsWith('998') && phoneInput.length === 12) {
+        phoneInput = phoneInput.substring(3);
+      }
+
+      const alertBox = document.getElementById('director-error-alert');
+      alertBox.classList.add('hidden');
+
+      const found = DIRECTORS_DB.find(d => {
+        const nameMatch = d.fullName.toLowerCase().includes(nameInput) || nameInput.includes(d.fullName.toLowerCase());
+        const phoneMatch = d.rawDigits === phoneInput;
+        return nameMatch && phoneMatch;
+      });
+
+      if (!found) {
+        document.getElementById('director-error-msg').innerText = "Ma'lumotlar xato! Kiritilgan shaxs maktab direktori sifatida ro'yxatga olinmagan yoki uning nomidagi telefon raqami noto'g'ri. Boshidan urinib ko'ring.";
+        alertBox.classList.remove('hidden');
+        return;
+      }
+
+      pendingDirector = found;
+      document.getElementById('director-step-1').classList.add('hidden');
+      document.getElementById('director-step-2').classList.remove('hidden');
+      document.getElementById('sms-code-preview').innerHTML = `Hurmatli <strong>${found.fullName}</strong>, sizning ${found.displayPhone} raqamingizga SMS kod yuborildi: <span class="font-mono font-black text-amber-900 bg-amber-200 px-2 py-0.5 rounded text-sm">${found.smsCode}</span>`;
+    }
+
+    function confirmDirectorSMS() {
+      const codeInput = document.getElementById('dir-sms-input').value.trim();
+      const alertBox = document.getElementById('director-error-alert');
+
+      if (pendingDirector && codeInput === pendingDirector.smsCode) {
+        currentUser = {
+          name: pendingDirector.fullName,
+          role: 'admin',
+          roleLabel: "Maktab Direktori",
+          avatar: "👑"
+        };
+        showUserDashboard();
+      } else {
+        document.getElementById('director-error-msg').innerText = "SMS tasdiqlash kodi xato kiritildi! Iltimos, boshidan urinib ko'ring.";
+        alertBox.classList.remove('hidden');
+        resetDirectorLogin();
+      }
+    }
+
+    function resetDirectorLogin() {
+      document.getElementById('director-step-2').classList.add('hidden');
+      document.getElementById('director-step-1').classList.remove('hidden');
+      document.getElementById('dir-sms-input').value = '';
+    }
+
+    function fillDirectorDemo() {
+      document.getElementById('dir-name').value = "Abdullayev Jasur";
+      document.getElementById('dir-phone').value = "901234567";
+      verifyDirectorAndSendCode();
+    }
+
+    // B) ZAUCH TEKSHIRUVI
+    function handleZavuchLogin(e) {
+      e.preventDefault();
+      const nameInput = document.getElementById('zav-name').value.trim().toLowerCase();
+      let phoneInput = getCleanDigits(document.getElementById('zav-phone').value.trim());
+
+      if (phoneInput.startsWith('998') && phoneInput.length === 12) {
+        phoneInput = phoneInput.substring(3);
+      }
+
+      const alertBox = document.getElementById('zavuch-error-alert');
+      alertBox.classList.add('hidden');
+
+      const found = ZAVUCH_DB.find(z => {
+        const nameMatch = z.fullName.toLowerCase().includes(nameInput) || nameInput.includes(z.fullName.toLowerCase());
+        const phoneMatch = z.rawDigits === phoneInput;
+        return nameMatch && phoneMatch;
+      });
+
+      if (!found) {
+        alertBox.classList.remove('hidden');
+        return;
+      }
+
+      currentUser = {
+        name: found.fullName,
+        role: 'zavuch',
+        roleLabel: found.roleLabel,
+        avatar: found.avatar,
+        department: found.department
+      };
+      showUserDashboard();
+    }
+
+    function fillZavuchDemo() {
+      document.getElementById('zav-name').value = "Rahimova Feruza";
+      document.getElementById('zav-phone').value = "971234567";
+    }
+
+    // C) O'QITUVCHILAR TEKSHIRUVI
+    function handleTeacherLogin(e) {
+      e.preventDefault();
+      const nameInput = document.getElementById('teach-name').value.trim().toLowerCase();
+      let phoneInput = getCleanDigits(document.getElementById('teach-phone').value.trim());
+
+      if (phoneInput.startsWith('998') && phoneInput.length === 12) {
+        phoneInput = phoneInput.substring(3);
+      }
+
+      const alertBox = document.getElementById('teacher-error-alert');
+      alertBox.classList.add('hidden');
+
+      const found = TEACHERS_DB.find(t => {
+        const nameMatch = t.fullName.toLowerCase().includes(nameInput) || nameInput.includes(t.fullName.toLowerCase());
+        const phoneMatch = t.rawDigits === phoneInput;
+        return nameMatch && phoneMatch;
+      });
+
+      if (!found) {
+        alertBox.classList.remove('hidden');
+        return;
+      }
+
+      currentUser = {
+        name: found.fullName,
+        role: found.role,
+        roleLabel: found.roleLabel,
+        avatar: found.avatar,
+        subject: found.subject,
+        phone: found.displayPhone
+      };
+      showUserDashboard();
+    }
+
+    function fillTeacherDemo() {
+      document.getElementById('teach-name').value = "Karimov Bobur";
+      document.getElementById('teach-phone').value = "935552001";
+    }
+
+    // D) O'QUVCHI TEKSHIRUVI
+    function handleStudentLogin(e) {
+      e.preventDefault();
+      const idCode = document.getElementById('stud-id').value.trim().toUpperCase();
+      const found = schoolData.classStudents.find(s => s.id === idCode);
+
+      if (!found) {
+        alert(`Ushbu ${currentSchoolName}da bunday ID kodli o'quvchi topilmadi! Masalan: OQ-9V-01`);
+        return;
+      }
+
+      currentUser = {
+        name: found.name,
+        role: 'student',
+        roleLabel: `${found.classNum}-"${found.classLetter}" Sinf O'quvchisi`,
+        avatar: '👨‍🎓',
+        code: found.id,
+        studentData: found
+      };
+      showUserDashboard();
+    }
+
+    function fillStudentDemo() {
+      // 9-V sinfdagi birinchi o'quvchi ID sini topamiz
+      const sample = schoolData.classStudents.find(s => s.classNum === 9 && s.classLetter === 'V') || schoolData.classStudents[0];
+      if (sample) {
+        document.getElementById('stud-id').value = sample.id;
+      }
+    }
+
+    // 4. DASHBOARDLARNI KO'RSATISH
+    function showUserDashboard() {
+      document.getElementById('login-view').classList.add('hidden');
+      document.getElementById('admin-view').classList.add('hidden');
+      document.getElementById('student-view').classList.add('hidden');
+      document.getElementById('teacher-view').classList.add('hidden');
+
+      document.getElementById('user-pill').classList.remove('hidden');
+      document.getElementById('user-pill').classList.add('flex');
+      document.getElementById('logout-btn').classList.remove('hidden');
+      document.getElementById('logout-btn').classList.add('flex');
+      document.getElementById('user-name').innerText = currentUser.name;
+      document.getElementById('user-role-badge').innerText = currentUser.roleLabel;
+      document.getElementById('user-avatar').innerText = currentUser.avatar;
+
+      if (currentUser.role === 'admin' || currentUser.role === 'zavuch') {
+        document.getElementById('admin-view').classList.remove('hidden');
+        
+        const isDirector = currentUser.role === 'admin';
+        document.getElementById('admin-header-icon').innerText = isDirector ? '👑' : '📋';
+        document.getElementById('admin-badge-label').innerText = isDirector ? 'Tasdiqlangan Rahbar (Direktor)' : 'O\'quv Ishlari Zauchi';
+        document.getElementById('director-display-title').innerText = `${currentUser.name} (${currentUser.roleLabel})`;
+        document.getElementById('admin-school-subtitle').innerText = `${currentSchoolName} — 5-11 sinflarining to'liq ro'yxati va davomati.`;
+
+        // Ranglarni moslash
+        const headerCard = document.getElementById('admin-header-card');
+        const leftPanel = document.getElementById('admin-left-panel');
+        const rightPanel = document.getElementById('admin-right-panel');
+
+        if (isDirector) {
+          headerCard.className = "bg-gradient-to-r from-amber-500 via-orange-600 to-amber-700 rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-4";
+          leftPanel.classList.remove('hidden');
+          rightPanel.className = "lg:col-span-8 bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-sm";
+        } else {
+          headerCard.className = "bg-gradient-to-r from-purple-700 via-indigo-700 to-purple-800 rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-4";
+          leftPanel.classList.add('hidden');
+          rightPanel.className = "lg:col-span-12 bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-sm";
+        }
+
+        populateAllClassesDropdown('admin-filter-class');
+        renderQuickClassPills();
+        syncFromLeftToRight();
+      } else if (currentUser.role === 'student') {
+        document.getElementById('student-view').classList.remove('hidden');
+        renderStudentDashboard();
+      } else if (currentUser.role === 'teacher') {
+        document.getElementById('teacher-view').classList.remove('hidden');
+        document.getElementById('teacher-display-name').innerText = currentUser.name;
+        document.getElementById('teacher-display-sub').innerText = currentUser.subject;
+        document.getElementById('teacher-display-phone').innerText = currentUser.phone;
+        populateAllClassesDropdown('teacher-class-select');
+        renderTeacherJournal();
+      }
+    }
+
+    function logout() {
+      currentUser = null;
+      pendingDirector = null;
+      document.getElementById('user-pill').classList.add('hidden');
+      document.getElementById('logout-btn').classList.add('hidden');
+      document.getElementById('login-view').classList.remove('hidden');
+      document.getElementById('admin-view').classList.add('hidden');
+      document.getElementById('student-view').classList.add('hidden');
+      document.getElementById('teacher-view').classList.add('hidden');
+      
+      resetDirectorLogin();
+      document.getElementById('dir-name').value = '';
+      document.getElementById('dir-phone').value = '';
+      document.getElementById('zav-name').value = '';
+      document.getElementById('zav-phone').value = '';
+      document.getElementById('teach-name').value = '';
+      document.getElementById('teach-phone').value = '';
+      document.getElementById('stud-id').value = '';
+    }
+
+    function getAttendanceBadge(status) {
+      const base = "w-[145px] h-[36px] rounded-xl text-xs font-black inline-flex items-center justify-center gap-1.5 shadow-sm border transition-all select-none shrink-0";
+      if (status === 'Darsda bor') {
+        return `<span class="${base} bg-emerald-100 text-emerald-800 border-emerald-300"><i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i> Darsda bor</span>`;
+      } else if (status === 'Darsga kirmagan' || status === 'Sababsiz') {
+        return `<span class="${base} bg-red-100 text-red-800 border-red-300"><i class="fa-solid fa-circle-xmark text-red-600 text-sm"></i> Sababsiz</span>`;
+      } else {
+        return `<span class="${base} bg-amber-100 text-amber-800 border-amber-300"><i class="fa-solid fa-triangle-exclamation text-amber-600 text-sm"></i> Sababli</span>`;
+      }
+    }
+
+    // 5-11 Sinflar ro'yxatini shakllantirish
+    function populateAllClassesDropdown(selectId) {
+      const select = document.getElementById(selectId);
+      const prev = select.value;
+      select.innerHTML = '';
+
+      const letters = ['A', 'B', 'V', 'G'];
+      for (let num = 5; num <= 11; num++) {
+        for (let l of letters) {
+          const opt = document.createElement('option');
+          opt.value = `${num}-${l}`;
+          opt.innerText = `${num}-"${l}" Sinf`;
+          select.appendChild(opt);
+        }
+      }
+
+      if (prev && select.querySelector(`option[value="${prev}"]`)) {
+        select.value = prev;
+      } else {
+        select.value = '9-V';
+      }
+    }
+
+    // Tezkor sinf tanlash tugmalari
+    function renderQuickClassPills() {
+      const container = document.getElementById('quick-class-pills');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const activeVal = document.getElementById('admin-filter-class').value || '9-V';
+      const letters = ['A', 'B', 'V', 'G'];
+
+      for (let num = 5; num <= 11; num++) {
+        for (let l of letters) {
+          const cName = `${num}-${l}`;
+          const isAct = cName === activeVal;
+          const btn = document.createElement('button');
+          btn.className = `px-2.5 py-1 rounded-lg text-xs font-black shrink-0 transition touch-btn active:scale-95 ${
+            isAct ? 'bg-orange-600 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+          }`;
+          btn.innerText = `${num}-${l}`;
+          btn.onclick = () => {
+            document.getElementById('admin-filter-class').value = cName;
+            syncFromRightToLeft();
+          };
+          container.appendChild(btn);
+        }
+      }
+    }
+
+    function syncFromLeftToRight() {
+      const num = document.getElementById('new-student-grade-num').value;
+      const letter = document.getElementById('new-student-letter').value;
+      const targetClass = `${num}-${letter}`;
+
+      const rightSelect = document.getElementById('admin-filter-class');
+      if (rightSelect) {
+        rightSelect.value = targetClass;
+      }
+      renderAdminDashboard();
+      renderQuickClassPills();
+    }
+
+    function syncFromRightToLeft() {
+      const rightSelect = document.getElementById('admin-filter-class');
+      const [num, letter] = rightSelect.value.split('-');
+
+      const numSelect = document.getElementById('new-student-grade-num');
+      const letterSelect = document.getElementById('new-student-letter');
+      if (numSelect && letterSelect) {
+        numSelect.value = num;
+        letterSelect.value = letter;
+      }
+      renderAdminDashboard();
+      renderQuickClassPills();
+    }
+
+    // 5. DIREKTOR VA ZAUCH KABINETINI CHIQARISH
+    function renderAdminDashboard() {
+      const num = document.getElementById('new-student-grade-num').value;
+      const letter = document.getElementById('new-student-letter').value;
+
+      document.getElementById('admin-table-title').innerText = `${num}-"${letter}" Sinf O'quvchilari (${currentSchoolName})`;
+
+      const students = schoolData.classStudents.filter(s => s.classNum == num && s.classLetter == letter);
+
+      document.getElementById('admin-student-count').innerText = `${students.length} nafar`;
+
+      const present = students.filter(s => s.attendance === 'Darsda bor').length;
+      const pct = students.length > 0 ? ((present / students.length) * 100).toFixed(0) : '0';
+      document.getElementById('admin-attendance-pct').innerText = pct + '%';
+
+      const tbody = document.getElementById('admin-students-tbody');
+      const mobileCards = document.getElementById('admin-students-mobile-cards');
+      const emptyState = document.getElementById('admin-empty-state');
+
+      tbody.innerHTML = '';
+      mobileCards.innerHTML = '';
+
+      if (students.length === 0) {
+        emptyState.classList.remove('hidden');
+        document.getElementById('admin-empty-title').innerText = `${num}-"${letter}" sinfida o'quvchi yo'q.`;
+        return;
+      } else {
+        emptyState.classList.add('hidden');
+      }
+
+      students.forEach((s, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition';
+        tr.innerHTML = `
+          <td class="py-3 px-3 font-bold text-slate-400 text-xs">${idx + 1}</td>
+          <td class="py-3 px-3 font-mono font-bold text-orange-600">${s.id}</td>
+          <td class="py-3 px-3 font-extrabold text-slate-800 text-sm">
+            <div class="flex items-center gap-2">
+              <span>${s.name}</span>
+              <span class="text-[9px] bg-slate-100 text-slate-500 font-bold px-1.5 py-0.5 rounded">Kundalik</span>
+            </div>
+          </td>
+          <td class="py-3 px-3 font-black text-slate-700 text-center">${s.classNum}-"${s.classLetter}"</td>
+          <td class="py-3 px-3 text-center">
+            <button onclick="adminCycleAttendance('${s.id}')" title="Bosib o'zgartiring" class="transition active:scale-95 touch-btn">
+              ${getAttendanceBadge(s.attendance)}
+            </button>
+          </td>
+          <td class="py-3 px-3 text-right">
+            <button onclick="openStudentFromAdmin('${s.id}')" class="px-3 py-1.5 rounded-xl bg-orange-100 hover:bg-orange-200 text-orange-700 font-bold text-xs transition active:scale-95 touch-btn">
+              Kundaligi
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+
+        // Telefon ko'rinishi uchun karta
+        const card = document.createElement('div');
+        card.className = 'p-3.5 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm space-y-2.5';
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-xs font-bold text-orange-600 bg-orange-100 px-2 py-0.5 rounded-md">${s.id}</span>
+              <h4 class="font-black text-slate-900 text-sm">${s.name}</h4>
+            </div>
+            <button onclick="openStudentFromAdmin('${s.id}')" class="px-2.5 py-1 rounded-lg bg-orange-100 text-orange-700 font-bold text-xs shrink-0 touch-btn active:scale-95">
+              Kundaligi <i class="fa-solid fa-angle-right text-[10px] ml-0.5"></i>
+            </button>
+          </div>
+          
+          <div class="pt-2.5 border-t border-slate-200 flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-600">Davomat:</span>
+            <button onclick="adminCycleAttendance('${s.id}')" class="transition active:scale-95 touch-btn">
+              ${getAttendanceBadge(s.attendance)}
+            </button>
+          </div>
+        `;
+        mobileCards.appendChild(card);
+      });
+    }
+
+    function openStudentFromAdmin(id) {
+      const found = schoolData.classStudents.find(s => s.id === id);
+      if (found) {
+        currentUser = {
+          name: found.name,
+          role: 'student',
+          roleLabel: `${found.classNum}-"${found.classLetter}" Sinf O'quvchisi`,
+          avatar: '👨‍🎓',
+          code: found.id,
+          studentData: found
+        };
+        showUserDashboard();
+      }
+    }
+
+    function adminCycleAttendance(studentId) {
+      const student = schoolData.classStudents.find(s => s.id === studentId);
+      if (student) {
+        if (student.attendance === 'Darsda bor') {
+          student.attendance = 'Darsga kirmagan';
+        } else if (student.attendance === 'Darsga kirmagan') {
+          student.attendance = 'Sababli';
+        } else {
+          student.attendance = 'Darsda bor';
+        }
+        saveCurrentSchoolData();
+        renderAdminDashboard();
+      }
+    }
+
+    function handleCreateStudent(e) {
+      e.preventDefault();
+      const name = document.getElementById('new-student-name').value.trim();
+      const num = parseInt(document.getElementById('new-student-grade-num').value);
+      const letter = document.getElementById('new-student-letter').value;
+      const attend = document.getElementById('new-student-attend').value;
+
+      const newId = `OQ-${num}${letter}-${schoolData.classStudents.length + 1}`;
+
+      const newStudent = {
+        id: newId,
+        name: name,
+        classNum: num,
+        classLetter: letter,
+        attendance: attend,
+        subjectGrades: {
+          "Matematika va Algebra": { daily: [], chorak1: null, obshi: null },
+          "Ona tili va Adabiyot": { daily: [], chorak1: null, obshi: null },
+          "Ingliz tili": { daily: [], chorak1: null, obshi: null },
+          "Fizika": { daily: [], chorak1: null, obshi: null }
+        },
+        pwd: '1234'
+      };
+
+      schoolData.classStudents.push(newStudent);
+      saveCurrentSchoolData();
+      renderAdminDashboard();
+
+      const successBox = document.getElementById('new-student-success');
+      successBox.innerHTML = `
+        <i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i>
+        Qo'shildi: <strong>${name}</strong> (${num}-"${letter}") | ID: <span class="font-mono text-emerald-900 font-black">${newId}</span>
+      `;
+      successBox.classList.remove('hidden');
+      document.getElementById('new-student-name').value = '';
+    }
+
+    // 6. O'QITUVCHI JURNALI
+    function renderTeacherJournal() {
+      const selectVal = document.getElementById('teacher-class-select').value || '9-V';
+      const [num, letter] = selectVal.split('-');
+      
+      document.getElementById('teacher-journal-title').innerText = `${num}-"${letter}" Sinf Jurnali (${currentSchoolName})`;
+
+      const tbody = document.getElementById('teacher-students-tbody');
+      const mobileCards = document.getElementById('teacher-students-mobile-cards');
+      const emptyState = document.getElementById('teacher-empty-state');
+      const studentSelect = document.getElementById('fast-action-student');
+
+      tbody.innerHTML = '';
+      mobileCards.innerHTML = '';
+      if(studentSelect) studentSelect.innerHTML = '';
+
+      const students = schoolData.classStudents.filter(s => s.classNum == num && s.classLetter == letter);
+
+      if (students.length === 0) {
+        emptyState.classList.remove('hidden');
+        return;
+      } else {
+        emptyState.classList.add('hidden');
+      }
+
+      students.forEach((s, idx) => {
+        if(studentSelect) {
+          const opt = document.createElement('option');
+          opt.value = s.id;
+          opt.innerText = `${s.name}`;
+          studentSelect.appendChild(opt);
+        }
+
+        let subjData = s.subjectGrades && s.subjectGrades[currentUser.subject] ? s.subjectGrades[currentUser.subject] : { daily: [] };
+        const currentBadges = subjData.daily.map(d => `<span class="grade-badge grade-${d.grade} mr-1" title="${d.date}">${d.grade}</span>`).join('');
+        
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition';
+        tr.innerHTML = `
+          <td class="py-3 px-3 text-xs text-slate-400 font-bold">${idx + 1}</td>
+          <td class="py-3 px-3 font-mono text-xs font-semibold text-slate-600">${s.id}</td>
+          <td class="py-3 px-3 font-extrabold text-slate-800 text-sm">${s.name}</td>
+          <td class="py-3 px-3 text-center">
+             ${getAttendanceBadge(s.attendance)}
+          </td>
+          <td class="py-3 px-3 text-center">
+            ${currentBadges || '<span class="text-xs text-slate-400">---</span>'}
+          </td>
+        `;
+        tbody.appendChild(tr);
+
+        const mcard = document.createElement('div');
+        mcard.className = 'p-3.5 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm space-y-2.5';
+        mcard.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">${s.id}</span>
+              <h4 class="font-black text-slate-900 text-sm">${s.name}</h4>
+            </div>
+            ${getAttendanceBadge(s.attendance)}
+          </div>
+          <div class="pt-2.5 border-t border-slate-200 flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-600">Joriy Baholar:</span>
+            <div>${currentBadges || '<span class="text-xs text-slate-400">---</span>'}</div>
+          </div>
+        `;
+        mobileCards.appendChild(mcard);
+      });
+    }
+
+    function handleTeacherFastAction(e) {
+      e.preventDefault();
+      const studentId = document.getElementById('fast-action-student').value;
+      const attendance = document.getElementById('fast-action-attendance').value;
+      const grade = document.getElementById('fast-action-grade').value;
+
+      const student = schoolData.classStudents.find(s => s.id === studentId);
+      if (student) {
+        student.attendance = attendance;
+        
+        if (grade !== "") {
+          if (!student.subjectGrades) student.subjectGrades = {};
+          let subjData = student.subjectGrades[currentUser.subject];
+          if (!subjData) {
+             subjData = { daily: [], chorak1: null, obshi: null };
+             student.subjectGrades[currentUser.subject] = subjData;
+          }
+          const d = new Date();
+          const dateStr = String(d.getDate()).padStart(2, '0') + '.' + String(d.getMonth() + 1).padStart(2, '0');
+          subjData.daily.push({ date: dateStr, grade: parseInt(grade) });
+        }
+        
+        saveCurrentSchoolData();
+        renderTeacherJournal();
+        
+        const successBox = document.getElementById('fast-action-success');
+        successBox.innerHTML = `
+          <i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i>
+          Saqlandi: <strong>${student.name}</strong>
+        `;
+        successBox.classList.remove('hidden');
+        setTimeout(() => { successBox.classList.add('hidden'); }, 3000);
+      }
+    }
+
+    function teacherCycleAttendance(studentId) {
+      const student = schoolData.classStudents.find(s => s.id === studentId);
+      if (student) {
+        if (student.attendance === 'Darsda bor') {
+          student.attendance = 'Darsga kirmagan';
+        } else if (student.attendance === 'Darsga kirmagan') {
+          student.attendance = 'Sababli';
+        } else {
+          student.attendance = 'Darsda bor';
+        }
+        saveCurrentSchoolData();
+        renderTeacherJournal();
+      }
+    }
+
+    function addGrade(studentId, grade) {
+      const student = schoolData.classStudents.find(s => s.id === studentId);
+      if (student) {
+        if (!student.subjectGrades) {
+          // Fallback if older data structure is somehow present
+          student.subjectGrades = {
+             "Matematika va Algebra": { daily: [], chorak1: null, obshi: null },
+             "Ona tili va Adabiyot": { daily: [], chorak1: null, obshi: null },
+             "Ingliz tili": { daily: [], chorak1: null, obshi: null },
+             "Fizika": { daily: [], chorak1: null, obshi: null }
+          };
+        }
+        
+        let subjData = student.subjectGrades[currentUser.subject];
+        if (!subjData) {
+           subjData = { daily: [], chorak1: null, obshi: null };
+           student.subjectGrades[currentUser.subject] = subjData;
+        }
+
+        // Add a mock date (e.g. today's date formatted as DD.MM)
+        const d = new Date();
+        const dateStr = String(d.getDate()).padStart(2, '0') + '.' + String(d.getMonth() + 1).padStart(2, '0');
+        
+        subjData.daily.push({ date: dateStr, grade: grade });
+        saveCurrentSchoolData();
+        renderTeacherJournal();
+      }
+    }
+
+    let activeStudentTab = null;
+
+    function switchStudentTab(subjectName) {
+      activeStudentTab = subjectName;
+      renderStudentDashboard();
+    }
+
+    // 7. O'QUVCHI KABINETI
+    function renderStudentDashboard() {
+      const currentStudent = currentUser.studentData || {
+        name: currentUser.name,
+        classNum: 9,
+        classLetter: 'V',
+        attendance: 'Darsda bor',
+        id: 'OQ-9V-01',
+        subjectGrades: {
+          "Matematika va Algebra": { daily: [], chorak1: null, obshi: null }
+        }
+      };
+
+      document.getElementById('student-profile-name').innerText = currentStudent.name;
+      document.getElementById('student-profile-id').innerText = currentStudent.id;
+      document.getElementById('student-profile-class').innerText = `${currentStudent.classNum}-"${currentStudent.classLetter}" Sinf (${currentSchoolName})`;
+
+      const initials = currentStudent.name.split(' ').map(n => n[0]).join('').substring(0, 2);
+      document.getElementById('student-avatar-initials').innerText = initials || 'OQ';
+
+      const badge = document.getElementById('student-status-badge');
+      badge.innerText = currentStudent.attendance;
+      if (currentStudent.attendance === 'Darsda bor') {
+        badge.className = 'text-xs font-black text-emerald-600 leading-none mt-1.5';
+      } else if (currentStudent.attendance === 'Darsga kirmagan') {
+        badge.className = 'text-xs font-black text-red-600 leading-none mt-1.5';
+      } else {
+        badge.className = 'text-xs font-black text-amber-600 leading-none mt-1.5';
+      }
+
+      // Tab logic
+      const subjectsObj = currentStudent.subjectGrades || {
+          "Matematika va Algebra": { daily: [], chorak1: null, obshi: null },
+          "Ona tili va Adabiyot": { daily: [], chorak1: null, obshi: null },
+          "Ingliz tili": { daily: [], chorak1: null, obshi: null },
+          "Fizika": { daily: [], chorak1: null, obshi: null }
+      };
+
+      // Calculate real average grade from all daily grades
+      let totalSum = 0;
+      let totalCount = 0;
+      Object.values(subjectsObj).forEach(sub => {
+         if (sub.daily) {
+             sub.daily.forEach(d => {
+                totalSum += d.grade;
+                totalCount++;
+             });
+         }
+      });
+      document.getElementById('student-avg-grade').innerText = totalCount > 0 ? (totalSum / totalCount).toFixed(1) : '-';
+
+      const subjectNames = Object.keys(subjectsObj);
+      
+      if (!activeStudentTab || !subjectNames.includes(activeStudentTab)) {
+        activeStudentTab = subjectNames[0] || "Matematika va Algebra";
+      }
+
+      const tabsContainer = document.getElementById('student-subject-tabs');
+      tabsContainer.innerHTML = '';
+      subjectNames.forEach(sub => {
+          const isAct = sub === activeStudentTab;
+          const btn = document.createElement('button');
+          btn.className = `px-3 py-1.5 rounded-xl text-[11px] font-black shrink-0 transition touch-btn active:scale-95 ${
+            isAct ? 'bg-sky-600 text-white shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-200'
+          }`;
+          btn.innerText = sub;
+          btn.onclick = () => switchStudentTab(sub);
+          tabsContainer.appendChild(btn);
+      });
+
+      const detailsContainer = document.getElementById('student-subject-details');
+      const sData = subjectsObj[activeStudentTab] || { daily: [], chorak1: null, obshi: null };
+      
+      let dailyHtml = '';
+      if (sData.daily && sData.daily.length > 0) {
+        dailyHtml = sData.daily.map(d => `
+           <div class="flex flex-col items-center bg-white border border-slate-200 p-2.5 rounded-2xl shadow-sm min-w-[55px] shrink-0">
+             <span class="text-[10px] text-slate-400 font-extrabold mb-1.5">${d.date}</span>
+             <span class="grade-badge grade-${d.grade}">${d.grade}</span>
+           </div>
+        `).join('');
+      } else {
+        dailyHtml = '<div class="text-xs text-slate-400 font-semibold italic w-full text-center py-2">Hozircha kunlik baho yo\'q</div>';
+      }
+
+      detailsContainer.innerHTML = `
+         <h4 class="font-black text-slate-800 text-sm mb-3 flex items-center justify-between">
+            <span>${activeStudentTab}</span>
+            <span class="text-[10px] bg-slate-200 text-slate-600 px-2 py-0.5 rounded-md">Kunlik</span>
+         </h4>
+         <div class="flex overflow-x-auto gap-2.5 pb-2 mb-4 scrollbar-thin">
+            ${dailyHtml}
+         </div>
+         
+         <div class="grid grid-cols-2 gap-3 pt-4 border-t border-slate-200">
+           <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-3 flex items-center justify-between shadow-sm">
+              <span class="text-[10px] font-black text-emerald-800 uppercase tracking-wide">1-Chorak</span>
+              <span class="text-xl font-black text-emerald-600">${sData.chorak1 || '-'}</span>
+           </div>
+           <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3 flex items-center justify-between shadow-sm">
+              <span class="text-[10px] font-black text-amber-800 uppercase tracking-wide">Obshi Baho</span>
+              <span class="text-xl font-black text-amber-600">${sData.obshi || '-'}</span>
+           </div>
+         </div>
+      `;
+
+      const lessonsContainer = document.getElementById('student-today-lessons');
+      lessonsContainer.innerHTML = `
+        <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl">
+          <div class="text-[9px] font-bold text-slate-400">1-DARS • 08:00</div>
+          <div class="font-bold text-slate-800 text-xs">Algebra</div>
+          <div class="text-[10px] text-sky-600 font-semibold mt-0.5">№204-xona • Karimov B.</div>
+        </div>
+        <div class="p-2.5 bg-sky-50 border border-sky-200 rounded-xl ring-2 ring-sky-500/20">
+          <div class="text-[9px] font-bold text-sky-600">2-DARS • 08:50 (Hozir)</div>
+          <div class="font-bold text-slate-900 text-xs">Ona tili</div>
+          <div class="text-[10px] text-sky-700 font-semibold mt-0.5">№215-xona • Usmonova D.</div>
+        </div>
+        <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl">
+          <div class="text-[9px] font-bold text-slate-400">3-DARS • 09:40</div>
+          <div class="font-bold text-slate-800 text-xs">Fizika</div>
+          <div class="text-[10px] text-sky-600 font-semibold mt-0.5">№108-xona • Xoliqov S.</div>
+        </div>
+      `;
+
+      const hwContainer = document.getElementById('student-homework-list');
+      hwContainer.innerHTML = `
+        <div class="p-3 rounded-xl border bg-amber-50/50 border-amber-200">
+          <span class="text-xs font-extrabold text-amber-800">Algebra</span>
+          <p class="text-xs text-slate-700 font-medium mt-0.5">§14, 214-218 masalalarni daftarga yechish</p>
+          <span class="text-[10px] text-slate-400 font-semibold mt-1 inline-block"><i class="fa-regular fa-calendar mr-1"></i> Ertaga</span>
+        </div>
+        <div class="p-3 rounded-xl border bg-sky-50/50 border-sky-200">
+          <span class="text-xs font-extrabold text-sky-800">Ona tili</span>
+          <p class="text-xs text-slate-700 font-medium mt-0.5">«Vatanim — faxrim» mavzusida erkin insho yozish</p>
+          <span class="text-[10px] text-slate-400 font-semibold mt-1 inline-block"><i class="fa-regular fa-calendar mr-1"></i> Payshanba</span>
+        </div>
+      `;
+    }
+
+    // Dastlabki yuklash
+    updateSchoolMetricsUI();
+  </script>
+</body>
+</html>
